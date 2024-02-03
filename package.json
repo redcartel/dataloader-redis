@@ -1,0 +1,21 @@
+{
+  "name": "@redcartel/layered-loader",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "author": "Carter Adams",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/json-stable-stringify": "^1.0.36",
+    "@types/node": "^20.11.16",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "dataloader": "^2.2.2",
+    "json-stable-stringify": "^1.1.1",
+    "lru-cache": "^10.2.0",
+    "murmurhash": "^2.0.1",
+    "redis": "^4.6.12"
+  }
+}
