@@ -1,3 +1,3 @@
-import DataloaderRedis from './lib/RedisLoader';
+import DataLoaderRedis from './lib/DataLoaderRedis';
 
-export default DataloaderRedis;
+export default DataLoaderRedis;

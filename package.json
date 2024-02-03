@@ -3,10 +3,13 @@
   "version": "0.0.1-alpha",
   "main": "./dist/index.js",
   "author": "Carter Adams",
+  "repository": "https://github.com/redcartel/dataloader-redis",
+  "description": "Dataloader implementation with an intermediate redis cache layer",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "DATALOADER_REDIS_DEBUG=1 ts-node-dev ./src/_demo"
   },
   "devDependencies": {
     "@types/redis": "^4.0.11",
