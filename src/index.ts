@@ -1,3 +1,3 @@
-import { LayeredLoader } from "./lib/LayeredLoader";
+import DataloaderRedis from './lib/RedisLoader';
 
-export default LayeredLoader;
+export default DataloaderRedis;

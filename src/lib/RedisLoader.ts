@@ -1,11 +1,11 @@
-import LayeredLoader from '..';
-import { RedisClientType, commandOptions, createClient} from 'redis';
+import { LayeredLoader } from './LayeredLoader';
+import { RedisClientType } from 'redis';
 import stringify from 'json-stable-stringify';
 import { LRUCache } from 'lru-cache';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
 
-export default class RedisLoader<K extends {}, V extends {}> extends LayeredLoader<K, V> {
+class DataloaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
     public client : RedisClientType;
 
     constructor(client: RedisClientType, batchLoad: BatchLoadFn<K, V>, { ttl, options } : { ttl?: number, options?: Options<K,V>}) {
@@ -39,7 +39,6 @@ export default class RedisLoader<K extends {}, V extends {}> extends LayeredLoad
                         multi.set(_k, stringify(vals[j]))
                         multi.expire(_k, _ttl);
                     }
-                    // don't await
                     multi.exec();
                 }
             },
@@ -51,3 +50,5 @@ export default class RedisLoader<K extends {}, V extends {}> extends LayeredLoad
         this.client = client;
     }
 }
+
+export default DataloaderRedis;

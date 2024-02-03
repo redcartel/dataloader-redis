@@ -1,11 +1,15 @@
 {
-  "name": "@redcartel/layered-loader",
-  "version": "0.0.1",
-  "main": "src/index.ts",
+  "name": "dataloader-redis",
+  "version": "0.0.1-alpha",
+  "main": "./dist/index.js",
   "author": "Carter Adams",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
   "devDependencies": {
+    "@types/redis": "^4.0.11",
     "@types/json-stable-stringify": "^1.0.36",
     "@types/node": "^20.11.16",
     "ts-node-dev": "^2.0.0",
@@ -15,7 +19,9 @@
     "dataloader": "^2.2.2",
     "json-stable-stringify": "^1.1.1",
     "lru-cache": "^10.2.0",
-    "murmurhash": "^2.0.1",
+    "murmurhash": "^2.0.1"
+  },
+  "peerDependencies": {
     "redis": "^4.6.12"
   }
 }
