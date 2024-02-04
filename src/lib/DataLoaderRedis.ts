@@ -4,6 +4,9 @@ import stringify from 'json-stable-stringify';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
 
+type OrError<T> = T | Error;
+type OrNull<T> = T | null;
+
 class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
     public client : RedisClientType;
 
@@ -29,7 +32,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                         console.warn('redis read fail, client not ready');
                         return keys.map(_key => new Error('Redis not connected'));
                     }
-                    const vals = (await client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(result => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
+                    const vals = (await client.MGET(keys.map(key => `${this.makeKey(key)}`))).map((result : OrNull<string>) => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
                     
                     return vals;
                 },

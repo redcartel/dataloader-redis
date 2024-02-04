@@ -2,3 +2,6 @@ node_modules
 startdev.sh
 stopdev.sh
 .git
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
