@@ -23,10 +23,6 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
         const { ttl, options} = dataloaderRedisOptions ?? {};
         const _ttl = ttl ?? 60;
 
-        if (!client.isReady) {
-            client.connect();
-        }
-
         super([
             {
                 reader: async (keys: readonly K[]) => {
