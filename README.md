@@ -1,4 +1,4 @@
-# Dataloader-redis
+# dataloader-redis
 
 Motivating problem is graphql federation across kubernetes pods
 

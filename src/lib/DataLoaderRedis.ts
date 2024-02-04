@@ -1,24 +1,26 @@
 import { LayeredLoader } from './LayeredLoader';
 import { RedisClientType } from 'redis';
 import stringify from 'json-stable-stringify';
-import { LRUCache } from 'lru-cache';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
 
-class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
+class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
     public client : RedisClientType;
 
-    constructor(client: RedisClientType, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: { ttl?: number, options?: Options<K,V>}) {
+    private _prefix : string;
+
+    public makeKey(key: K) {
+        const _key = `${this. _prefix}:${stringify(key)}`;
+        return _key.length < 64 ? _key : v3(_key).toString(36);
+    }
+
+    constructor(client: RedisClientType, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: { prefix?: string, ttl?: number, options?: Options<K,V>}) {
         const { ttl, options} = dataloaderRedisOptions ?? {};
         const _ttl = ttl ?? 60;
-        const _prefix = v3(batchLoad.toString()).toString(36);
 
-        function makeKey(key: K) {
-            const _key = `${_prefix}:${stringify(key)}`;
-            return _key.length < 64 ? _key : v3(_key).toString(36);
+        if (!client.isReady) {
+            client.connect();
         }
-
-        client.connect();
 
         super([
             {
@@ -27,28 +29,31 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
                         console.warn('redis read fail, client not ready');
                         return keys.map(_key => new Error('Redis not connected'));
                     }
-                    const vals = (await client.MGET(keys.map(key => `${makeKey(key)}`))).map(result => result === null ? new Error('missing or null') : JSON.parse(result));
+                    const vals = (await client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(result => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
+                    
                     return vals;
                 },
                 writer: async (keys: readonly K[], vals: V[]) => {
                     if (!client?.isReady) {
-                        console.warn('redis not connected, write fail')
+                        console.warn('redis write fail, client not ready')
                         return;
                     }
                     const multi = client.multi();
                     for (let j = 0; j < keys.length; j++) {
-                        const _k = makeKey(keys[j]);
+                        const _k = this.makeKey(keys[j]);
                         multi.set(_k, stringify(vals[j]))
                         multi.expire(_k, _ttl);
                     }
-                    multi.exec();
-                }
+                    await multi.exec();
+                },
+                clear: async (key) => { client.del([this.makeKey(key)]) }
             },
             {
                 reader: batchLoad
             }
-        ], {...options, name: options?.name ?? 'RedisLoader', cacheMap: options?.cacheMap ?? new LRUCache<K,Promise<V>>({max: 512, ttl: Math.ceil(_ttl / 4)})});
+        ], {...options, noDeduplication: false, waitForCacheWrite: false});
 
+        this._prefix = dataloaderRedisOptions?.prefix ?? v3(batchLoad.toString()).toString(36);
         this.client = client;
     }
 }
