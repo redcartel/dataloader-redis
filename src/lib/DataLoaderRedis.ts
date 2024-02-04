@@ -1,8 +1,10 @@
 import { LayeredLoader } from './LayeredLoader';
-import { RedisClientType } from 'redis';
+import { createClient } from 'redis';
 import stringify from 'json-stable-stringify';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
+
+type RedisClientType = ReturnType<typeof createClient>
 
 type OrError<T> = T | Error;
 type OrNull<T> = T | null;

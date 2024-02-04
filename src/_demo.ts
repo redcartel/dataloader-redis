@@ -12,7 +12,7 @@ console.log('redis needs to be running on localhost:6379')
 async function go() {
     // turning off in-memory cache for demo, normally in a long running process you'd want to use LRU or something like that
     // key and value types can be anything JSON serializable
-    const client : RedisClientType = createClient();
+    const client = createClient();
     await client.connect();
 
     const loader = new DataLoaderRedis<number, { val: number }>(client, slowIdentity, {
