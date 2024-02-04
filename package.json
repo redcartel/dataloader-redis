@@ -2,7 +2,7 @@
   "name": "dataloader-redis",
   "version": "0.0.2-alpha",
   "main": "./dist/index.js",
-  "author": "Carter Adams",
+  "author": "Carter Adams (carteradams@gmail.com)",
   "repository": "https://github.com/redcartel/dataloader-redis",
   "description": "Dataloader implementation with an intermediate redis cache layer",
   "license": "MIT",

@@ -2,8 +2,10 @@
 
 Motivating problem is graphql federation across kubernetes pods
 
+In early development, any and all feedback welcome.
+
 ```javascript
-import DataloaderRedis from 'dataloader-redis'
+import DataLoaderRedis from 'dataloader-redis'
 
 // ...
 
