@@ -4,12 +4,12 @@ import stringify from 'json-stable-stringify';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
 
-type RedisClientType = ReturnType<typeof createClient>
+type RedisClientType = ReturnType<typeof createClient>;
 
 type OrError<T> = T | Error;
 type OrNull<T> = T | null;
 
-class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
+class DataLoaderRedis<K, V, _RedisClientType extends RedisClientType> extends LayeredLoader<K, V> {
     public client : RedisClientType;
 
     private _prefix : string;
@@ -19,7 +19,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
         return _key.length < 64 ? _key : v3(_key).toString(36);
     }
 
-    constructor(client: RedisClientType, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: { prefix?: string, ttl?: number, options?: Options<K,V>}) {
+    constructor(client: _RedisClientType, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: { prefix?: string, ttl?: number, options?: Options<K,V>}) {
         const { ttl, options} = dataloaderRedisOptions ?? {};
         const _ttl = ttl ?? 60;
 

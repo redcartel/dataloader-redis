@@ -15,7 +15,7 @@ async function go() {
     const client = createClient();
     await client.connect();
 
-    const loader = new DataLoaderRedis<number, { val: number }>(client, slowIdentity, {
+    const loader = new DataLoaderRedis(client, slowIdentity, {
         ttl: 5,
         options: {
             cache: false,
