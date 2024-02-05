@@ -10,7 +10,7 @@ type OrError<T> = T | Error;
 type OrNull<T> = T | null;
 
 class DataLoaderRedis<K, V, _RedisClientType extends RedisClientType> extends LayeredLoader<K, V> {
-    public client : RedisClientType;
+    public client : _RedisClientType;
 
     private _prefix : string;
 
@@ -26,19 +26,20 @@ class DataLoaderRedis<K, V, _RedisClientType extends RedisClientType> extends La
         super([
             {
                 reader: async (keys: readonly K[]) => {
-                    if (!client?.isReady) {
-                        console.warn('redis read fail, client not ready');
-                        return keys.map(_key => new Error('Redis not connected'));
-                    }
-                    const vals = (await client.MGET(keys.map(key => `${this.makeKey(key)}`))).map((result : OrNull<string>) => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
+                    // if (!client?.isReady) {
+                    //     console.warn('redis read fail, client not ready');
+                    //     return keys.map(_key => new Error('Redis not connected'));
+                    // }
+                    const vals = (await client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(
+                        (result : OrNull<string>) => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
                     
                     return vals;
                 },
                 writer: async (keys: readonly K[], vals: V[]) => {
-                    if (!client?.isReady) {
-                        console.warn('redis write fail, client not ready')
-                        return;
-                    }
+                    // if (!client?.isReady) {
+                    //     console.warn('redis write fail, client not ready')
+                    //     return;
+                    // }
                     const multi = client.multi();
                     for (let j = 0; j < keys.length; j++) {
                         const _k = this.makeKey(keys[j]);
