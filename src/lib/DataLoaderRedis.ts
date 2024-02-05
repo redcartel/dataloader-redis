@@ -1,13 +1,13 @@
 import { LayeredLoader } from './LayeredLoader';
-import { RedisClientType, createClient } from 'redis';
 import stringify from 'json-stable-stringify';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
-
-type _RedisClient = ReturnType<typeof createClient<any, any, any>>
+import { RedisClientType, createClient } from 'redis';
 
 type OrError<T> = T | Error;
 type OrNull<T> = T | null;
+
+type _RedisClient = ReturnType<typeof createClient<any, any, any>>
 
 class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
     public client : RedisClientType;
@@ -26,21 +26,21 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
         super([
             {
                 reader: async (keys: readonly K[]) => {
-                    if (!client?.isReady) {
-                        console.warn('redis read fail, client not ready');
-                        return keys.map(_key => new Error('Redis not connected'));
-                    }
-                    const vals = (await client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(
+                    // if (!client?.isReady) {
+                    //     console.warn('redis read fail, client not ready');
+                    //     return keys.map(_key => new Error('Redis not connected'));
+                    // }
+                    const vals = (await this.client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(
                         (result : OrNull<string>) => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
                     
                     return vals;
                 },
                 writer: async (keys: readonly K[], vals: V[]) => {
-                    if (!client?.isReady) {
-                        console.warn('redis write fail, client not ready')
-                        return;
-                    }
-                    const multi = client.multi();
+                    // if (!client?.isReady) {
+                    //     console.warn('redis write fail, client not ready')
+                    //     return;
+                    // }
+                    const multi = this.client.multi();
                     for (let j = 0; j < keys.length; j++) {
                         const _k = this.makeKey(keys[j]);
                         multi.set(_k, stringify(vals[j]))
@@ -48,7 +48,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                     }
                     await multi.exec();
                 },
-                clear: async (key) => { client.del([this.makeKey(key)]) }
+                clear: async (key) => { this.client.del([this.makeKey(key)]) }
             },
             {
                 reader: batchLoad
