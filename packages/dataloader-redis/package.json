@@ -1,6 +1,6 @@
 {
   "name": "dataloader-redis",
-  "version": "0.0.9-alpha",
+  "version": "0.0.10-alpha",
   "main": "./dist/index.js",
   "author": "Carter Adams (carteradams@gmail.com)",
   "repository": {
