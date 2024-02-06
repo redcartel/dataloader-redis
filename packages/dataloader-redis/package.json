@@ -1,0 +1,33 @@
+{
+  "name": "dataloader-redis",
+  "version": "0.0.9-alpha",
+  "main": "./dist/index.js",
+  "author": "Carter Adams (carteradams@gmail.com)",
+  "repository": {
+    "url": "https://github.com/redcartel/dataloader-redis"
+  },
+  "description": "Dataloader implementation with an intermediate redis cache layer",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf dist && tsc --project tsconfig-dist.json",
+    "dev": "DATALOADER_REDIS_DEBUG=1 ts-node-dev ./src/_demo"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/json-stable-stringify": "^1.0.36",
+    "@types/node": "^20.11.16",
+    "jest": "^29.7.0",
+    "redis": "^4.6.13",
+    "ts-jest": "^29.1.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "dataloader": "^2.2.2",
+    "json-stable-stringify": "^1.1.1",
+    "murmurhash": "^2.0.1"
+  },
+  "peerDependencies": {
+    "redis": "^4.6.12"
+  }
+}

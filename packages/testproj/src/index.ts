@@ -1,5 +1,5 @@
 import { RedisClientType, createClient } from 'redis';
-import DataLoaderRedis from '.';
+import DataLoaderRedis from 'dataloader-redis';
 
 function slowIdentity(keys : readonly number[]) {
     return new Promise<{ val: number }[]>(res => {

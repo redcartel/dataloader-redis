@@ -1,0 +1,20 @@
+{
+  "name": "testproj",
+  "private": true,
+  "packageManager": "yarn@4.1.0",
+  "dependencies": {
+    "dataloader-redis": "workspace:^",
+    "redis": "^4.6.13"
+  },
+  "scripts": {
+    "run-redis": "docker run --rm --name redis -p 6379:6379 redis redis-server --loglevel verbose",
+    "start-dev": "yarn ts-node-dev ./src/index.ts",
+    "dev": "DATALOADER_REDIS_DEBUG=1 concurrently \"npm:run-redis\" \"npm:start-dev\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "concurrently": "^8.2.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}

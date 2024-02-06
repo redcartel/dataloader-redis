@@ -9,18 +9,40 @@ type OrNull<T> = T | null;
 
 type _RedisClient = ReturnType<typeof createClient<any, any, any>>
 
+type DataLoaderRedisOptions<K, V> = {
+    prefix?: string
+    ttl?: number,
+    dataLoaderOptions: Options<K, V>,
+    serializeKey?: (key: K) => string,
+    serializeValue?: (value: V) => string,
+    deserializeValue?: (serialized: string) => V | Error
+}
+
 class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
     public client : RedisClientType;
 
     private _prefix : string;
 
-    public makeKey(key: K) {
-        const _key = `${this. _prefix}:${stringify(key)}`;
-        return _key.length < 64 ? _key : v3(_key).toString(36);
+    public serializeKey = (key: K) : string => {
+        return stringify(key);
     }
 
-    constructor(client: _RedisClient, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: { prefix?: string, ttl?: number, options?: Options<K,V>}) {
-        const { ttl, options} = dataloaderRedisOptions ?? {};
+    public serializeValue = (value: V) : string => {
+        return stringify(value);
+    }
+
+    public deserializeValue = (serialized: string) : V | Error => {
+        return JSON.parse(serialized);
+    }
+
+    public makeKey(key: K) {
+        const _key = `${this. _prefix}:${this.serializeKey(key)}`;
+        return _key.length < 64 ? _key : `${this._prefix}:${v3(this.serializeKey(key)).toString(36)}`;
+    }
+
+    constructor(client: _RedisClient, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: DataLoaderRedisOptions<K,V>) {
+        const { ttl, dataLoaderOptions : options, serializeKey, serializeValue, deserializeValue} = dataloaderRedisOptions ?? {};
+
         const _ttl = ttl ?? 60;
 
         super([
@@ -31,7 +53,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                         return keys.map(_key => new Error('Redis not connected'));
                     }
                     const vals = (await this.client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(
-                        (result : OrNull<string>) => result === null ? new Error('Not Found') : JSON.parse(result)) as (V | Error)[];
+                        (result : OrNull<string>) => result === null ? new Error('Not Found') : this.deserializeValue(result)) as (V | Error)[];
                     
                     return vals;
                 },
@@ -43,7 +65,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                     const multi = this.client.multi();
                     for (let j = 0; j < keys.length; j++) {
                         const _k = this.makeKey(keys[j]);
-                        multi.set(_k, stringify(vals[j]))
+                        multi.set(_k, this.serializeValue(vals[j]))
                         multi.expire(_k, _ttl);
                     }
                     await multi.exec();
@@ -55,6 +77,9 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
             }
         ], {...options, noDeduplication: false, waitForCacheWrite: false});
 
+        this.serializeKey = serializeKey ?? this.serializeKey;
+        this.serializeValue = serializeValue ?? this.serializeValue;
+        this.deserializeValue = deserializeValue ?? this.deserializeValue;
         this._prefix = dataloaderRedisOptions?.prefix ?? v3(batchLoad.toString()).toString(36);
         this.client = client as RedisClientType;
     }

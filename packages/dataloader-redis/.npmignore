@@ -5,4 +5,3 @@ stopdev.sh
 .yarn
 .pnp.cjs
 .pnp.loader.mjs
-packages/dataloader-redis-testproj
