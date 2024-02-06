@@ -9,8 +9,7 @@
   "description": "Dataloader implementation with an intermediate redis cache layer",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && tsc --project tsconfig-dist.json",
-    "dev": "DATALOADER_REDIS_DEBUG=1 ts-node-dev ./src/_demo"
+    "build": "rm -rf dist && tsc --project tsconfig-dist.json"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

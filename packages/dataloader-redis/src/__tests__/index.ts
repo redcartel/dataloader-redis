@@ -11,13 +11,20 @@ describe('some basics', () => {
     })
 
     test('the original demo', async () => {
+
+        const accessCounts : { [key: number]: number }= {};
+
         function slowIdentity(keys : readonly number[]) {
             return new Promise<{ val: number }[]>(res => {
-                setTimeout(function () { return res(keys.map(key => ({val: key}))) }, Math.random() * 1000)
+                setTimeout(function () { return res(keys.map(key => {
+                    accessCounts[key] !== undefined ? accessCounts[key]++ : accessCounts[key] = 1;
+                    return {val: key};
+                })) }, Math.random() * 1000)
             });
         }
 
         const client = createClient();
+
 
         const loader = new DataLoaderRedis(client as any, slowIdentity, {
             ttl: 5,
@@ -33,6 +40,8 @@ describe('some basics', () => {
         const [e, f] = await Promise.all([loader.load(2), loader.load(3)]);
         expect(e).toStrictEqual({'val': 2});
         expect(f).toStrictEqual({'val': 3});
-        
+        expect(accessCounts[1]).toBe(1);
+        expect(accessCounts[2]).toBe(1);
+        expect(accessCounts[3]).toBe(1);
     })
 });

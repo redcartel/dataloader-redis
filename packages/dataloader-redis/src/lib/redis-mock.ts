@@ -1,3 +1,5 @@
+import { _debugLog } from "./LayeredLoader";
+
 interface MultiCommand {
     commands: Array<any[]>;
     set(key: string, value: string): MultiCommand;
@@ -16,12 +18,11 @@ interface MultiCommand {
       this.ready = true;
     }
   
-    isReady(): boolean {
+    get isReady(): boolean {
       return this.ready;
     }
   
     MGET(keys: string[]): (string | null)[] {
-      console.log(keys, this.data);
       const values = keys.map(key => this.data[key] || null);
       return values;
     }
@@ -32,6 +33,7 @@ interface MultiCommand {
   
     del(key: string): void {
       delete this.data[key];
+      _debugLog('after del mock state ', this.data)
     }
   
     multi(): MultiCommand {
@@ -52,6 +54,7 @@ interface MultiCommand {
             const [cmd, ...args] = command;
             return that.executeCommand(cmd, args);
           });
+          _debugLog('after mutli, mock state: ', that.data);
           return results;
         },
       };

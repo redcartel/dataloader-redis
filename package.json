@@ -12,7 +12,8 @@
   ],
   "packageManager": "yarn@4.1.0",
   "scripts": {
-    "warmup": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish --dry-run"
+    "warmup": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish --dry-run",
+    "test": "yarn workspace dataloader-redis jest"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

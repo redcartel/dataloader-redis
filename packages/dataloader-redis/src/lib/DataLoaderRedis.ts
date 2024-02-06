@@ -15,7 +15,7 @@ type DataLoaderRedisOptions<K, V> = {
     dataLoaderOptions: Options<K, V>,
     serializeKey?: (key: K) => string,
     serializeValue?: (value: V) => string,
-    deserializeValue?: (serialized: string) => V | Error
+    deserializeValue?: (serialized: string) => OrError<V>
 }
 
 class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
@@ -31,7 +31,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
         return stringify(value);
     }
 
-    public deserializeValue = (serialized: string) : V | Error => {
+    public deserializeValue = (serialized: string) : OrError<V> => {
         return JSON.parse(serialized);
     }
 
@@ -53,7 +53,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                         return keys.map(_key => new Error('Redis not connected'));
                     }
                     const vals = (await this.client.MGET(keys.map(key => `${this.makeKey(key)}`))).map(
-                        (result : OrNull<string>) => result === null ? new Error('Not Found') : this.deserializeValue(result)) as (V | Error)[];
+                        (result : OrNull<string>) => result === null ? new Error('Not Found') : this.deserializeValue(result)) as OrError<V>[];
                     
                     return vals;
                 },
