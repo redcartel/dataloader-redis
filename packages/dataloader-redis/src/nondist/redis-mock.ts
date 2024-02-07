@@ -1,4 +1,4 @@
-import { _debugLog } from "./LayeredLoader";
+import { _debugLog } from "../lib/LayeredLoader";
 
 interface MultiCommand {
     commands: Array<any[]>;

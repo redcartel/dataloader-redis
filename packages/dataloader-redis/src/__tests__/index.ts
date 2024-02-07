@@ -1,5 +1,5 @@
 import DataLoaderRedis from '..';
-import { createClient } from '../lib/redis-mock';
+import { createClient } from '../nondist/redis-mock';
 
 describe('some basics', () => {
     test('1 returns 1', async () => {

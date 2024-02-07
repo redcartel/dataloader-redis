@@ -1,0 +1,15 @@
+{
+  "name": "data-docker-containers",
+  "private": true,
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "run-redis": "docker run --rm --name redis -p 6378:6379 redis redis-server --loglevel notice",
+    "run-postgres": "docker run --rm -e POSTGRES_PASSWORD=password --name postgres -p 5432:5432 postgres:15 postgres -c log_statement=all",
+    "run-postgres-persist": "docker run --rm -e POSTGRES_PASSWORD=password --name postgres -p 5432:5432 -v ./pgdata:/var/lib/postgresql/data postgres:15 postgres -c log_statement=all",
+    "run-proj-persist": "concurrently \"npm:run-redis\" \"npm:run-postgres-persist\"",
+    "run-proj-backend": "concurrently \"npm:run-redis\" \"npm:run-postgres\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

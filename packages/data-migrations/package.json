@@ -1,0 +1,23 @@
+{
+  "name": "data-migrations",
+  "private": true,
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "setup-local-db": "dotenv -e .env ts-node ./src/local-setup-db.ts",
+    "migrate": "dotenv -e .env yarn graphile-migrate migrate",
+    "migrate-commit": "dotenv -e .env yarn graphile-migrate commit",
+    "migrate-uncommit": "dotenv -e .env yarn graphile-migrate uncommit",
+    "migrate-seed": "dotenv -e .env yarn graphile-migrate run seeds/seed.sql"
+  },
+  "dependencies": {
+    "graphile-migrate": "^1.4.1",
+    "pg": "^8.11.3",
+    "wait-on": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "dotenv-cli": "^7.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

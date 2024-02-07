@@ -1,5 +1,5 @@
 {
-  "name": "testproj",
+  "name": "backend-gateway",
   "private": true,
   "packageManager": "yarn@4.1.0",
   "dependencies": {
