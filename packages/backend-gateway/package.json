@@ -3,17 +3,26 @@
   "private": true,
   "packageManager": "yarn@4.1.0",
   "dependencies": {
+    "@graphql-tools/executor-http": "^1.0.7",
+    "@graphql-tools/stitch": "^9.0.3",
+    "@graphql-tools/stitching-directives": "^3.0.0",
+    "@graphql-tools/utils": "^10.0.13",
     "dataloader-redis": "workspace:^",
-    "redis": "^4.6.13"
+    "graphql": "^16.8.1",
+    "graphql-yoga": "^5.1.1",
+    "redis": "^4.6.13",
+    "wait-on": "^7.2.0"
   },
   "scripts": {
-    "run-redis": "docker run --rm --name redis -p 6379:6379 redis redis-server --loglevel verbose",
-    "start-dev": "yarn ts-node-dev ./src/index.ts",
-    "dev": "DATALOADER_REDIS_DEBUG=1 concurrently \"npm:run-redis\" \"npm:start-dev\""
+    "server-build": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
+    "server-dev": "ts-node-dev ./src/index.ts --transpileOnly",
+    "server-run": "node ./dist/index.js"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
+    "@types/wait-on": "^5.3.4",
     "concurrently": "^8.2.2",
+    "esbuild": "^0.20.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   }

@@ -1,0 +1,21 @@
+{
+  "name": "backend-accounts-graph",
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "server-build": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
+    "server-dev": "ts-node-dev ./src/index.ts --transpileOnly",
+    "server-run": "node ./dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "esbuild": "^0.20.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@apollo/subgraph": "^2.7.1",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
+    "graphql-yoga": "^5.1.1"
+  }
+}

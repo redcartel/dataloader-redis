@@ -10,6 +10,7 @@
     "migrate-seed": "dotenv -e .env yarn graphile-migrate run seeds/seed.sql"
   },
   "dependencies": {
+    "@types/node": "^20.11.16",
     "graphile-migrate": "^1.4.1",
     "pg": "^8.11.3",
     "wait-on": "^7.2.0"
