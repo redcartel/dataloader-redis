@@ -14,9 +14,12 @@
   "scripts": {
     "warmup": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish --dry-run",
     "publish": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish",
-    "test": "yarn workspace dataloader-redis jest"
+    "test": "yarn workspace dataloader-redis jest",
+    "server:dev": "dotenv -e .env yarn workspaces foreach -Ap run server-dev --verbose"
   },
   "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "dotenv-cli": "^7.3.0",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   }

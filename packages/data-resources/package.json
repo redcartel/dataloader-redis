@@ -1,5 +1,5 @@
 {
-  "name": "data-docker-containers",
+  "name": "data-resources",
   "private": true,
   "packageManager": "yarn@4.1.0",
   "scripts": {
@@ -7,9 +7,16 @@
     "run-postgres": "docker run --rm -e POSTGRES_PASSWORD=password --name postgres -p 5432:5432 postgres:15 postgres -c log_statement=all",
     "run-postgres-persist": "docker run --rm -e POSTGRES_PASSWORD=password --name postgres -p 5432:5432 -v ./pgdata:/var/lib/postgresql/data postgres:15 postgres -c log_statement=all",
     "run-proj-persist": "concurrently \"npm:run-redis\" \"npm:run-postgres-persist\"",
-    "run-proj-backend": "concurrently \"npm:run-redis\" \"npm:run-postgres\""
+    "run-proj": "concurrently \"npm:run-redis\" \"npm:run-postgres\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@types/node": "^20.11.16",
+    "@types/pg": "^8.11.0",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "redis": "^4.6.13"
   }
 }

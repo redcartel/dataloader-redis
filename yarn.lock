@@ -1801,10 +1801,14 @@ __metadata:
   dependencies:
     "@apollo/subgraph": "npm:^2.7.1"
     "@types/node": "npm:^20.11.16"
+    "@types/pg": "npm:^8.11.0"
+    data-resources: "workspace:^"
+    dataloader-redis: "workspace:^"
     esbuild: "npm:^0.20.0"
     graphql: "npm:^16.8.1"
     graphql-tag: "npm:^2.12.6"
     graphql-yoga: "npm:^5.1.1"
+    pg: "npm:^8.11.3"
     ts-node-dev: "npm:^2.0.0"
     typescript: "npm:^5.3.3"
   languageName: unknown
@@ -2235,14 +2239,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"data-docker-containers@workspace:packages/data-docker-containers":
-  version: 0.0.0-use.local
-  resolution: "data-docker-containers@workspace:packages/data-docker-containers"
-  dependencies:
-    concurrently: "npm:^8.2.2"
-  languageName: unknown
-  linkType: soft
-
 "data-migrations@workspace:packages/data-migrations":
   version: 0.0.0-use.local
   resolution: "data-migrations@workspace:packages/data-migrations"
@@ -2258,10 +2254,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"data-resources@workspace:^, data-resources@workspace:packages/data-resources":
+  version: 0.0.0-use.local
+  resolution: "data-resources@workspace:packages/data-resources"
+  dependencies:
+    "@types/node": "npm:^20.11.16"
+    "@types/pg": "npm:^8.11.0"
+    concurrently: "npm:^8.2.2"
+    pg: "npm:^8.11.3"
+    redis: "npm:^4.6.13"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
 "dataloader-mainpkg@workspace:.":
   version: 0.0.0-use.local
   resolution: "dataloader-mainpkg@workspace:."
   dependencies:
+    "@types/pg": "npm:^8.11.0"
+    dotenv-cli: "npm:^7.3.0"
     prettier: "npm:^3.2.5"
     typescript: "npm:^5.3.3"
   languageName: unknown

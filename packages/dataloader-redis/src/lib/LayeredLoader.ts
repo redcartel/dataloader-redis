@@ -2,8 +2,11 @@ import DataLoader, { Options, BatchLoadFn } from "dataloader";
 
 export const _debugLog = (...args: any[]) => process.env['DATALOADER_REDIS_DEBUG'] && console.log(args);
 
+export type OrError<T> = T | Error;
+export type OrNull<T> = T | null;
+
 export type Layer<K, V> = {
-    reader: BatchLoadFn<K, V>,
+    reader: (keys: K[]) => Promise<OrError<V>[]>,
     writer?: (keys: K[], vals: V[]) => Promise<void>,
     clear?: (key: K) => Promise<void>,
     prime?: (key: K, value: V) => void,
@@ -24,7 +27,7 @@ export class LayeredLoader<K, V> extends DataLoader<K, V> {
 
             async function readWriteLayer(idx: number, keys: readonly K[]): Promise<(V | Error)[]> {
                 _debugLog('readWrite layer ' + idx + ' received', keys);
-                let vals = Array.from(await layers[idx].reader(keys));
+                let vals = Array.from(await layers[idx].reader(keys as K[]));
                 if (idx < len - 1) {
                     let _badKeys = keys.filter((_, idx) => vals[idx] === undefined || vals[idx] instanceof Error)
                     if (_badKeys.length > 0) {

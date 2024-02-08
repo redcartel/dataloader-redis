@@ -4,3 +4,5 @@ dist/
 .pnp.cjs
 .pnp.loader.mjs
 .vscode
+.env*
+*.env

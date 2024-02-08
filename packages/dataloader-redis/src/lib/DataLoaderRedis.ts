@@ -1,11 +1,10 @@
-import { LayeredLoader } from './LayeredLoader';
+import { LayeredLoader, OrError, OrNull } from './LayeredLoader';
 import stringify from 'json-stable-stringify';
 import { BatchLoadFn, Options } from 'dataloader';
 import { v3 } from 'murmurhash';
 import { RedisClientType, createClient } from 'redis';
 
-type OrError<T> = T | Error;
-type OrNull<T> = T | null;
+
 
 type _RedisClient = ReturnType<typeof createClient<any, any, any>>
 
@@ -40,14 +39,14 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
         return _key.length < 64 ? _key : `${this._prefix}:${v3(this.serializeKey(key)).toString(36)}`;
     }
 
-    constructor(client: _RedisClient, batchLoad: BatchLoadFn<K, V>, dataloaderRedisOptions?: DataLoaderRedisOptions<K,V>) {
+    constructor(client: _RedisClient, batchLoad: (keys: K[]) => Promise<OrError<V>[]>, dataloaderRedisOptions?: DataLoaderRedisOptions<K,V>) {
         const { ttl, dataLoaderOptions : options, serializeKey, serializeValue, deserializeValue} = dataloaderRedisOptions ?? {};
 
         const _ttl = ttl ?? 60;
 
         super([
             {
-                reader: async (keys: readonly K[]) => {
+                reader: async (keys: K[]) => {
                     if (!client?.isReady) {
                         console.warn('redis read fail, client not ready');
                         return keys.map(_key => new Error('Redis not connected'));
@@ -57,7 +56,7 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                     
                     return vals;
                 },
-                writer: async (keys: readonly K[], vals: V[]) => {
+                writer: async (keys: K[], vals: V[]) => {
                     if (!client?.isReady) {
                         console.warn('redis write fail, client not ready')
                         return;

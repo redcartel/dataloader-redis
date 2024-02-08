@@ -8,14 +8,18 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
+    "@types/pg": "^8.11.0",
     "esbuild": "^0.20.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@apollo/subgraph": "^2.7.1",
+    "data-resources": "workspace:^",
+    "dataloader-redis": "workspace:^",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
-    "graphql-yoga": "^5.1.1"
+    "graphql-yoga": "^5.1.1",
+    "pg": "^8.11.3"
   }
 }
