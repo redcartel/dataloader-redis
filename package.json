@@ -15,7 +15,7 @@
     "warmup": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish --dry-run",
     "publish": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish",
     "test": "yarn workspace dataloader-redis jest",
-    "server:dev": "dotenv -e .env yarn workspaces foreach -Ap run server-dev --verbose"
+    "server:dev": "dotenv -e .env yarn workspaces foreach -- --interlaced --all --parallel run server-dev"
   },
   "devDependencies": {
     "@types/pg": "^8.11.0",

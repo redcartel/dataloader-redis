@@ -3,7 +3,7 @@ import { AccountType, getAccountsRepository } from "../data-access";
 import DataLoaderRedis from "dataloader-redis";
 
 const redisConnection = makeRedisConnection();
-//redisConnection.connect();
+redisConnection.connect();
 
 export function getAccountDataLoader() {
     const repo = getAccountsRepository();
