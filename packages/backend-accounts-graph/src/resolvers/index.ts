@@ -1,16 +1,12 @@
-import { getAccountDataLoader } from "../data-aggregation";
-
-console.log(1);
-const accountLoader = getAccountDataLoader();
-console.log(2);
+import { AccountsContext } from "../context";
 
 export const resolvers = {
     Account: {
-      __resolveReference: async ({ id }, context) => {
-        return await accountLoader.load(id);
+      __resolveReference: async ({ id }, { loaders } : AccountsContext) => {
+        return await loaders.accountById.load(id);
       }
     },
     Query: {
-      account: async (_root, { id }, context) => await accountLoader.load(id)
+      account: async (_root, { id }, { loaders } : AccountsContext) => await loaders.accountById.load(id)
     },
   }

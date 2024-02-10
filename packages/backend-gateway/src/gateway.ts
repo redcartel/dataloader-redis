@@ -38,13 +38,14 @@ function fetchSchema(endpoint : string) {
 
 function fetchSchemas() {
   return Promise.all([
-    fetchSchema(`http://localhost:4001/graphql`)
+    fetchSchema(`http://localhost:4001/graphql`),
+    fetchSchema(`http://localhost:4002/graphql`)
   ]);
 }
 
 async function makeGatewaySchema() {
   console.log('gateway wait for subgraphs');
-  await waitOn({ resources: ['tcp:localhost:4001'] });
+  await waitOn({ resources: ['tcp:localhost:4001', 'tcp:localhost:4002'] });
   console.log('subgraphs seen');
   const { stitchingDirectivesTransformer } = stitchingDirectives();
   const schema = stitchSchemas({

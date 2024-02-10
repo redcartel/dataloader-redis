@@ -1,9 +1,9 @@
 import { Pool } from "pg";
 
-console.log(process.env['POSTGRES_HOST']);
+let _pool : Pool;
 
 export function makePostgresConnection(min = 2, max = 10) {
-    return new Pool({
+    _pool ??= new Pool({
         host: process.env['POSTGRES_HOST'],
         user: process.env['POSTGRES_USER'],
         password: process.env['POSTGRES_PASSWORD'],
@@ -17,4 +17,6 @@ export function makePostgresConnection(min = 2, max = 10) {
         max,
         min
     })
+
+    return _pool;
 }

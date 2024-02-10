@@ -1,5 +1,5 @@
 {
-  "name": "backend-accounts-graph",
+  "name": "backend-posts-graph",
   "private": true,
   "packageManager": "yarn@4.1.0",
   "scripts": {
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@apollo/subgraph": "^2.7.1",
+    "backend-accounts-graph": "workspace:^",
     "data-resources": "workspace:^",
     "dataloader-redis": "workspace:^",
     "graphql": "^16.8.1",

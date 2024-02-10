@@ -1,4 +1,5 @@
 import { makePostgresConnection } from "data-resources/src/postgres-connection";
+import { Pool } from "pg";
 
 export interface AccountType {
     id?: string,
@@ -8,11 +9,10 @@ export interface AccountType {
 
 export class AccountRepository {
 
-    private connection : ReturnType<typeof makePostgresConnection>
+    private connection : Pool
 
-    constructor() {
-        console.log('connecting to postgres...');
-        this.connection = makePostgresConnection();
+    constructor(pool : Pool) {
+        this.connection = pool;
     }
 
     private accountRowMap(row : any) : AccountType {
@@ -45,11 +45,4 @@ export class AccountRepository {
         result.rows.forEach(row => resultMap[row['id']] = this.accountRowMap(row));
         return ids.map(id => resultMap[id] ?? new Error('Not Found'));
     }
-}
-
-let _repo : AccountRepository;
-
-export function getAccountsRepository() {
-    _repo ??= new AccountRepository();
-    return _repo;
 }
