@@ -1,6 +1,6 @@
 {
   "name": "dataloader-redis",
-  "version": "0.0.10-alpha",
+  "version": "0.0.11-alpha",
   "main": "./dist/index.js",
   "author": "Carter Adams (carteradams@gmail.com)",
   "repository": {
@@ -9,7 +9,8 @@
   "description": "Dataloader implementation with an intermediate redis cache layer",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && tsc --project tsconfig-dist.json"
+    "build": "rm -rf dist && tsc --project tsconfig-dist.json",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
