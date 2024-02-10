@@ -4,7 +4,9 @@ import { Pool } from "pg";
 export interface AccountType {
     id?: string,
     email?: string,
-    username?: string
+    username?: string,
+    created_at?: string,
+    updated_at?: string
 }
 
 export class AccountRepository {
@@ -19,12 +21,14 @@ export class AccountRepository {
         return {
             id: row.id,
             username: row.username,
-            email: row.email
+            email: row.email,
+            created_at: row.created_at.toISOString(),
+            updated_at: row.updated_at.toISOString()
         }
     }
 
     async accountById(id: string) {
-        const queryString = `SELECT id, email, username FROM accounts WHERE id = $1 LIMIT 1`;
+        const queryString = `SELECT id, email, username, created_at, updated_at FROM accounts WHERE id = $1 LIMIT 1`;
         const result = await this.connection.query(queryString, [id])
         if (result.rows.length !== 1) {
             return new Error('Not Found');
@@ -33,13 +37,13 @@ export class AccountRepository {
     }
 
     async accountsPage(pageNumber = 0, pageSize = 10) {
-        const queryString = `SELECT id, email, username FROM accounts LIMIT $1 OFFSET $2`;
+        const queryString = `SELECT id, email, username, created_at, updated_at FROM accounts LIMIT $1 OFFSET $2`;
         const result = await this.connection.query(queryString, [pageSize, pageNumber * pageSize]);
         return result.rows.map(row => this.accountRowMap(row));
     }
 
     async accountAggregate(ids: string[]) {
-        const queryString = `SELECT id, email, username FROM accounts WHERE id = ANY($1)`;
+        const queryString = `SELECT id, email, username, created_at, updated_at FROM accounts WHERE id = ANY($1)`;
         const result = await this.connection.query(queryString, [ids])
         let resultMap : { [key: string]: AccountType} = {};
         result.rows.forEach(row => resultMap[row['id']] = this.accountRowMap(row));

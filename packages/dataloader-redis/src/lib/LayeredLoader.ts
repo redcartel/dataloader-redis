@@ -51,7 +51,7 @@ export class LayeredLoader<K, V> extends DataLoader<K, V> {
                         })
 
                         if (_newWriteKeys.length > 0 && layers[idx].writer) {
-                            _debugLog('layer ' + idx + ' writing', _newWriteKeys);
+                            _debugLog('layer ' + idx + ' writing', _newWriteKeys, _updateMap);
                             const prom =  layers[idx].writer!(_newWriteKeys, _newWriteKeys.map(key => _updateMap.get(key) as V));
                             if (options?.waitForCacheWrite) {
                                 await prom;
@@ -69,9 +69,9 @@ export class LayeredLoader<K, V> extends DataLoader<K, V> {
                 return dedupedVals;
             }
 
-            const kvMap = new Map<K, V | Error>(dedupedKeys.map((key, idx) => [key, dedupedVals[idx]]));
+            const kvMap = new Map<K, OrError<V>>(dedupedKeys.map((key, idx) => [key, dedupedVals[idx]]));
 
-            return keys.map(key => kvMap.get(key) || new Error('Not Found'))
+            return keys.map(key => kvMap.get(key) ?? new Error('Not Found'))
 
         }, options);
 
@@ -94,7 +94,7 @@ export class LayeredLoader<K, V> extends DataLoader<K, V> {
         return this;
     }
 
-    public async asyncPrime(key: K, value: V | Error | PromiseLike<V>) {
+    public async asyncPrime(key: K, value: OrError<V> | Promise<V>) {
         const v = await value;
         if (v instanceof Error) {
             await this.asyncClear(key);
@@ -104,7 +104,7 @@ export class LayeredLoader<K, V> extends DataLoader<K, V> {
         await Promise.all(this.layers.map((layer) => layer.writer && layer.writer([key], [v])));
     }
 
-    override prime(key: K, value: V | Error | PromiseLike<V>): this {
+    override prime(key: K, value: OrError<V> | Promise<V>): this {
         this.asyncPrime(key, value);
         return this;
     }

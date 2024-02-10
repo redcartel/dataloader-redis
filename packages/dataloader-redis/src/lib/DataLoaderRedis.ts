@@ -69,7 +69,13 @@ class DataLoaderRedis<K, V> extends LayeredLoader<K, V> {
                     }
                     await multi.exec();
                 },
-                clear: async (key) => { this.client.del([this.makeKey(key)]) }
+                clear: async (key) => { 
+                    if (!client?.isReady) {
+                        console.warn('redis del fail, client not ready')
+                        return;
+                    }
+                    this.client.del([this.makeKey(key)]) 
+                }
             },
             {
                 reader: batchLoad
