@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { Pool } from "pg";
 
 export function verifyToken(token : string) {
     try {
@@ -14,6 +16,23 @@ export function encodeToken(account: { username: string, email: string}) {
   return token;
 }
 
-export async function login(username: string, password: string) {
+export async function login(pool: Pool, username: string, password: string) {
+  const query = 'SELECT password, email FROM accounts WHERE username = $1 LIMIT 1';
+  const result = await pool.query(query, [username]);
+  console.log(await bcrypt.hash(password, 10));
+  if (result.rows.length === 1) {
+    console.log(result.rows);
+    const success = await bcrypt.compare(password, result.rows[0].password ?? '');
+    if (success) {
+      return {
+        username,
+        email: result.rows[0].email
+      }
+    }
+    else {
+      return {
 
+      }
+    }
+  }
 }

@@ -8,8 +8,7 @@ export type GatewayContext = YogaInitialContext
 
 export function contextFactory(postgresConnection: Pool) {
     return async (context : any) => {
-        const token = context.req.cookies.token;
-        // console.log('token, ', token);
+        const token : string = context.req.cookies.token || context.req.headers['authorization']?.slice(8) || '';
         if (token) {
             const account = verifyToken(token);
             if (account) {

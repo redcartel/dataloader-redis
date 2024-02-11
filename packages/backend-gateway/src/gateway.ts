@@ -13,6 +13,7 @@ import { gatewayPlugins } from './middleware';
 import { schema } from './schema/gateway.graphql';
 import { resolvers } from './resolvers';
 import { contextFactory } from './context';
+import { makePostgresConnection } from 'data-resources/src/postgres-connection';
 
 
 const SDL_QUERY = parse(/* GraphQL */ `
@@ -80,11 +81,13 @@ async function makeGatewaySchema() {
 
 const app = express();
 
+const postgres = makePostgresConnection();
+
 const gatewayApp = createYoga({
   schema: makeGatewaySchema(),
   maskedErrors: process.env['NODE_ENV'] === 'production',
   plugins: gatewayPlugins,
-  context: contextFactory(null as any),
+  context: contextFactory(postgres),
   
 })
 

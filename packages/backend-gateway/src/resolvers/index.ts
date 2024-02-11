@@ -1,5 +1,6 @@
 import { Response } from "express";
-import { encodeToken } from "../services/authorization";
+import { encodeToken, login } from "../services/authorization";
+import { Pool } from "pg";
 
 export const resolvers = {
     Query: {
@@ -9,21 +10,31 @@ export const resolvers = {
         }
     },
     Mutation: {
-        login: (_source, { username, password }, { res, req }: { res: Response, req: Request }) => {
-            if (username === 'redcartel' && password === 'password') {
+        login: async (_source, { username, password }, { postgres, res, req }: { postgres: Pool, res: Response, req: Request }) => {
+            const account = await login(postgres, username.toLowerCase(), password);
+            if (account?.email) {
                 res.cookie('token', encodeToken({
-                    username: 'redcartel',
-                    email: 'carteradams@gmail.com'
-                }));
+                    username: account?.username?.toLowerCase() as string,
+                    email: account?.email
+                }), {
+                    httpOnly: true,
+                    sameSite: 'lax',
+                    domain: process.env['COOKIE_DOMAIN'] ?? 'localhost',
+                    maxAge: 36000000
+                });
                 return {
-                    username: 'redcartel',
-                    email: 'carteradams@gmail.com'
+                    username: account.username?.toLowerCase(),
+                    email: account.email
                 }
             }
             else {
-                res.cookie('token', 'badlogin');
+                res.cookie('token', '', {
+                    httpOnly: true,
+                    sameSite: 'lax',
+                    domain: process.env['COOKIE_DOMAIN'] ?? 'localhost',
+                    maxAge: 36000000
+                });
                 return {
-                    error: 'BADLOGIN'
                 }
             }
         }
