@@ -4,7 +4,7 @@ export const schema = gql`
     type AccountToken {
         username: String
         email: String
-        error: String
+        token: String
     }
 
     type Query {

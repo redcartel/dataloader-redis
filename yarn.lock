@@ -2063,6 +2063,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend-gateway@workspace:packages/backend-gateway"
   dependencies:
+    "@graphql-tools/delegate": "npm:^10.0.3"
     "@graphql-tools/executor-http": "npm:^1.0.7"
     "@graphql-tools/stitch": "npm:^9.0.3"
     "@graphql-tools/stitching-directives": "npm:^3.0.0"
