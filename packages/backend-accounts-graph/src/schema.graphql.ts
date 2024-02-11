@@ -11,4 +11,5 @@ type Account @key(fields: "id") {
 
 type Query {
   account(id: ID!): Account
-}`
+}
+`
