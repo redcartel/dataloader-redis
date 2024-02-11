@@ -1,6 +1,6 @@
 {
   "name": "dataloader-mainpkg",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "repository": {
     "url": "git+ssh://git@github.com/redcartel/dataloader-redis.git"
   },
@@ -15,7 +15,8 @@
     "warmup": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish --dry-run",
     "publish": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish",
     "test": "yarn workspace dataloader-redis jest",
-    "server:dev": "dotenv -e .env yarn workspaces foreach -- --interlaced --all --parallel run server-dev"
+    "backend:dev": "docker compose up --build",
+    "frontend:dev": "yarn workspace frontend dev"
   },
   "devDependencies": {
     "@types/pg": "^8.11.0",

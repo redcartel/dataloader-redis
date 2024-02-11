@@ -22,6 +22,7 @@
     "@whatwg-node/cookie-store": "^0.2.2",
     "@whatwg-node/server": "^0.9.25",
     "@whatwg-node/server-plugin-cookies": "^1.0.2",
+    "common-values": "workspace:^",
     "cookie-parser": "^1.4.6",
     "data-resources": "workspace:^",
     "dataloader-redis": "workspace:^",

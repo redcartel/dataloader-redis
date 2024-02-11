@@ -4,10 +4,11 @@
   "packageManager": "yarn@4.1.0",
   "scripts": {
     "run-redis": "docker run --rm --name redis -p 6379:6379 redis redis-server --loglevel debug",
-    "run-postgres": "docker run --rm -e POSTGRES_PASSWORD=password --name postgres -p 5432:5432 postgres:15 postgres -c log_statement=all",
-    "run-postgres-persist": "docker run --rm -e POSTGRES_PASSWORD=password --name postgres -p 5432:5432 -v ./pgdata:/var/lib/postgresql/data postgres:15 postgres -c log_statement=all",
-    "run-proj-persist": "concurrently \"npm:run-redis\" \"npm:run-postgres-persist\"",
-    "run-proj": "concurrently \"npm:run-redis\" \"npm:run-postgres\""
+    "run-postgres": "docker run --rm -e POSTGRES_PASSWORD=password --network=host --name postgres -p 5432:5432 postgres:15 postgres -c log_statement=all",
+    "run-postgres-persist": "docker run --rm -e POSTGRES_PASSWORD=password --network=host --name postgres -p 5432:5432 -v ./pgdata:/var/lib/postgresql/data postgres:15 postgres -c log_statement=all",
+    "run-supertokens": "docker run -p 3567:3567 --rm --name supertokens  --network=host -e POSTGRESQL_CONNECTION_URI=\"postgresql://supertokens_user:password@localhost:5432/supertokens?keepalives=1&sslmode=disable\" registry.supertokens.io/supertokens/supertokens-postgresql:7.0",
+    "run-proj-persist": "concurrently \"npm:run-redis\" \"npm:run-postgres-persist\" \"npm:run-supertokens\"",
+    "run-proj": "concurrently \"npm:run-redis\" \"npm:run-postgres\" \"npm:run-supertokens\""
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
@@ -16,6 +17,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "common-values": "workspace:^",
     "pg": "^8.11.3",
     "redis": "^4.6.13"
   }

@@ -1,19 +1,18 @@
 {
-    "compilerOptions": {
-      "composite": true,
-      "target": "ESNext",
-      "jsx": "preserve",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "noImplicitAny": false,
-      "skipLibCheck": true,
-      "rootDir": "./",
-      "types": ["node"], 
-    }
+  "compilerOptions": {
+    "composite": true,
+    "target": "ESNext",
+    "jsx": "preserve",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "rootDir": "./",
+    "types": ["node"]
   }
-  
+}

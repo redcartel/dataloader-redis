@@ -1,22 +1,25 @@
+import { config } from "common-values";
 import { Pool } from "pg";
 
-let _pool : Pool;
+let _pool: Pool;
 
 export function makePostgresConnection(min = 2, max = 10) {
-    _pool ??= new Pool({
-        host: process.env['POSTGRES_HOST'],
-        user: process.env['POSTGRES_USER'],
-        password: process.env['POSTGRES_PASSWORD'],
-        database: process.env['POSTGRES_DB'],
-        port: parseInt(process.env['POSTGRES_PORT'] ?? '5432'),
-        keepAlive: true,
-        keepAliveInitialDelayMillis: 10000,
-        ssl: process.env['POSTGRES_HOST']?.match('localhost') ? false : {
-            rejectUnauthorized: false,
+  _pool ??= new Pool({
+    host: config.postgres.host as string,
+    user: config.postgres.user as string,
+    password: config.postgres.password as string,
+    database: config.postgres.db as string,
+    port: config.postgres.port,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10000,
+    ssl: config.postgres.host?.match(/^localhost|^db/)
+      ? false
+      : {
+          rejectUnauthorized: false,
         },
-        max,
-        min
-    })
+    max,
+    min,
+  });
 
-    return _pool;
+  return _pool;
 }

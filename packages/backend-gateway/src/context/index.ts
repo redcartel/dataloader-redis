@@ -1,24 +1,20 @@
-import { YogaInitialContext } from "graphql-yoga"
-import { Pool } from "pg"
-import jwt from "jsonwebtoken"
-import { Request } from "express"
-import { verifyToken } from "../services/authorization"
+import { YogaInitialContext } from "graphql-yoga";
+import { Pool } from "pg";
+import { Request } from "express";
+import { getAccountFromSession } from "../services/authorization";
+import { Session } from "inspector";
+import supertokens from "supertokens-node";
+import { RedisClientType } from "redis";
 
-export type GatewayContext = YogaInitialContext
+export type GatewayContext = YogaInitialContext;
 
-export function contextFactory(postgresConnection: Pool) {
-    return async (context : any) => {
-        const token : string = context.req.cookies.token || context.req.headers['authorization']?.slice(8) || '';
-        if (token) {
-            const account = verifyToken(token);
-            if (account) {
-                return {
-                    ...context,
-                    account,
-                    postgres: postgresConnection
-                };
-            }
-        }
-        return { ...context, postgres: postgresConnection};
-    }
+export function contextFactory(redis: RedisClientType, postgres: Pool) {
+  return async (context: any) => {
+    const account = await getAccountFromSession(
+      context.req.session,
+      redis,
+      postgres,
+    );
+    return { ...context, account, postgres };
+  };
 }

@@ -4,6 +4,7 @@
   "packageManager": "yarn@4.1.0",
   "scripts": {
     "setup-local-db": "dotenv -e .env ts-node ./src/local-setup-db.ts",
+    "setup-supertokens": "dotenv -e .env ts-node ./src/setup-supertokens.ts",
     "migrate": "dotenv -e .env yarn graphile-migrate migrate",
     "migrate-commit": "dotenv -e .env yarn graphile-migrate commit",
     "migrate-uncommit": "dotenv -e .env yarn graphile-migrate uncommit",

@@ -1,0 +1,8 @@
+FROM node
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn set version stable
+RUN yarn

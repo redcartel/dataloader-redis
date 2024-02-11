@@ -1,13 +1,18 @@
-import { RedisClientType, createClient } from 'redis';
+import { config } from "common-values";
+import { RedisClientType, createClient } from "redis";
 
-let _client : RedisClientType;
+let _client: RedisClientType;
 
 export function makeRedisConnection() {
-    _client ??= createClient({
-        url: process.env['REDIS_URL'] ?? undefined
-    });
+  _client ??= createClient({
+    url: config.redis.url,
+  });
+  try {
     if (!_client.isReady) {
-        _client.connect();
+      _client.connect();
     }
-    return _client;
+  } catch (e) {
+    console.warn(e);
+  }
+  return _client;
 }
