@@ -1,9 +1,8 @@
 import { RateLimiterRedis } from "rate-limiter-flexible";
-import { Application } from "express";
+import { Application} from "express";
 import { errorHandler, middleware } from "supertokens-node/framework/express";
 import cors from "cors";
 import supertokens from "supertokens-node";
-import compression from "compression";
 import morgan from "morgan";
 import { redis } from "../server";
 import { config } from "common-values";
@@ -32,15 +31,16 @@ function rateLimiterMiddleware(points: number) {
 export function applyExpressMiddleware(app: Application) {
   app.use(morgan(config.isProd ? "short" : "dev"));
   app.use(rateLimiterMiddleware(10));
-  app.use(
-    cors({
-      origin: config.gateway.corsOrigin as string,
-      allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
-      credentials: true,
-    }),
-  );
+  // app.use(
+  //   cors({
+  //     origin: '*', //config.gateway.corsOrigin as string,
+  //     // allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
+  //     credentials: true,
+  //   }),
+  // );
+  // app.options('/graphql', cors('*'));
   // IMPORTANT: CORS should be before the below line.
   app.use(middleware());
-  app.use(errorHandler());
-  app.use(compression());
+  // app.use(errorHandler());
+  // app.use(compression());
 }

@@ -21,6 +21,9 @@ export const config = {
     url: process.env["GATEWAY_URL"],
     corsOrigin: process.env["CORS_ORIGIN"],
   },
+  auth: {
+    devSpoof: !!(process.env['ALLOW_DEV_SPOOF'] ?? '0').match(/1|true/i)
+  },
   backend: {
     dataloaderTtl: parseInt(process.env["DATALOADER_TTL"] ?? `${24 * 60 * 60}`)
   },

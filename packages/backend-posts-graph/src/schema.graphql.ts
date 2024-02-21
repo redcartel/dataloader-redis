@@ -12,12 +12,17 @@ export const postsSchema = gql`
     likes_count: Int!
   }
 
+  type PostsWithCursor {
+    posts: [Post!]!
+    cursor: String
+  }
+
   type Like @key(fields: "id") {
     id: ID!
-    accounts_id: ID!
     posts_id: ID!
+    accounts_id: ID
+    author: Account
     post: Post!
-    account: Account!
   }
 
   extend type Account @key(fields: "id") {
@@ -26,7 +31,18 @@ export const postsSchema = gql`
     likes: [Like!]!
   }
 
+  input PostsInput {
+    accountId: String
+    cursor: String
+  }
+
   type Query {
+    posts(input: PostsInput): PostsWithCursor
     post(id: ID!): Post
+  }
+
+  type Mutation {
+    makePost(body: String): Post
+    likePost(id: ID!): Like
   }
 `;

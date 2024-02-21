@@ -16,7 +16,8 @@
     "publish": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish",
     "test": "yarn workspace dataloader-redis jest",
     "backend:dev": "docker compose up --build",
-    "frontend:dev": "yarn workspace frontend dev"
+    "frontend:dev": "yarn workspace frontend start",
+    "rundb": "docker compose up db"
   },
   "devDependencies": {
     "@types/pg": "^8.11.0",

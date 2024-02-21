@@ -21,4 +21,9 @@ export const gatewayApp = createYoga({
   context: contextFactory(redis, postgres),
   graphiql: config.isDev,
   logging: config.isProd ? "warn" : "debug",
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    methods: ['POST']
+  }
 });

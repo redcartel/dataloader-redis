@@ -10,8 +10,10 @@ export type GatewayContext = YogaInitialContext;
 
 export function contextFactory(redis: RedisClientType, postgres: Pool) {
   return async (context: any) => {
+    const req : Request = context.req;
     const account = await getAccountFromSession(
-      context.req.session,
+      (req as any).session,
+      req.headers,
       redis,
       postgres,
     );

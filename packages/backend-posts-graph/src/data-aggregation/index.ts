@@ -1,5 +1,5 @@
 import { RedisClientType } from "redis";
-import PostRepository, { LikeType, PostType } from "../data-access";
+import PostRepository, { LikeType, LikesCursorType, PostType, PostsCursorType } from "../data-access";
 import DataLoaderRedis from "dataloader-redis";
 import { Pool } from "pg";
 import { config } from "common-values";
@@ -8,41 +8,36 @@ export default class PostsLoaders {
   private redis: RedisClientType;
   private postgres: Pool;
 
+  public limit : number = 20;
+
   private repo: PostRepository;
 
   public postsById: DataLoaderRedis<string, PostType>;
-  public postListByAccountsId: DataLoaderRedis<string, PostType[]>;
-  public likeListByPostsId: DataLoaderRedis<string, LikeType[]>;
-  public likeListByAccountsId: DataLoaderRedis<string, LikeType[]>;
   public likeCountByPostsId: DataLoaderRedis<string, number>;
+  public likesByPostAndCursor: DataLoaderRedis<[string, Date], LikesCursorType>;
+  public postsByCursor: DataLoaderRedis<Date, PostsCursorType>;
+  public postsByAccountAndCursor: DataLoaderRedis<[string, Date], PostsCursorType>; 
 
-  constructor(redisConnection: RedisClientType, postgresConnectioon: Pool) {
+  constructor(redisConnection: RedisClientType, postgresConnectioon: Pool, limit?: number) {
     this.redis = redisConnection;
     this.postgres = postgresConnectioon;
     this.repo = new PostRepository(this.postgres);
+    this.limit = limit ?? this.limit;
 
     this.postsById = new DataLoaderRedis<string, PostType>(
       this.redis,
-      async (ids: string[]) => this.repo.postAggregate(ids),
+      async (ids: string[]) => this.repo.postByIdsAggregate(ids),
       {
         ttl: config.backend.dataloaderTtl
       },
     );
 
-    this.postListByAccountsId = new DataLoaderRedis<string, PostType[]>(
+    (this.likesByPostAndCursor = new DataLoaderRedis<[string, Date], LikesCursorType>(
       this.redis,
-      async (ids: string[]) => this.repo.postsByAccountAggregate(ids),
-      {
-        ttl: config.backend.dataloaderTtl
-      },
-    );
-
-    (this.likeListByPostsId = new DataLoaderRedis<string, LikeType[]>(
-      this.redis,
-      async (ids: string[]) => this.repo.likesByPostAggregate(ids),
+      async (postCursors) => this.repo.likesByPostsAndCursorsAggregate(postCursors),
     )),
       {
-        ttl: config.backend.dataloaderTtl
+        ttl: 2
       };
 
     this.likeCountByPostsId = new DataLoaderRedis<string, number>(
@@ -53,12 +48,20 @@ export default class PostsLoaders {
       },
     );
 
-    this.likeListByAccountsId = new DataLoaderRedis<string, LikeType[]>(
+    this.postsByCursor = new DataLoaderRedis<Date, PostsCursorType>(
       this.redis,
-      async (ids: string[]) => this.repo.likesByAccountAggregate(ids),
+      async (cursors: Date[]) => this.repo.postsByCursorAggregate(cursors, this.limit),
       {
-        ttl: config.backend.dataloaderTtl
-      },
-    );
+        ttl: 2
+      }
+    )
+
+    this.postsByAccountAndCursor = new DataLoaderRedis<[string, Date], PostsCursorType>(
+      this.redis,
+      async(accountCursors) => this.repo.postsByAccountsAndCursorsAggregate(accountCursors, this.limit),
+      {
+        ttl: 2
+      }
+    )
   }
 }

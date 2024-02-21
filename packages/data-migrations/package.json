@@ -8,7 +8,8 @@
     "migrate": "dotenv -e .env yarn graphile-migrate migrate",
     "migrate-commit": "dotenv -e .env yarn graphile-migrate commit",
     "migrate-uncommit": "dotenv -e .env yarn graphile-migrate uncommit",
-    "migrate-seed": "dotenv -e .env yarn graphile-migrate run seeds/seed.sql"
+    "migrate-seed": "dotenv -e .env yarn graphile-migrate run seeds/seed.sql",
+    "migrate-reset": "dotenv -e .env yarn graphile-migrate reset"
   },
   "dependencies": {
     "@types/node": "^20.11.16",

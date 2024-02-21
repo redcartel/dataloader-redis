@@ -12,13 +12,11 @@ import { GraphQLResolverMap } from "@apollo/subgraph/dist/schema-helper";
 const pgConnection = makePostgresConnection();
 const redisConnection = makeRedisConnection();
 
-export const usersServer = createServer(
-  createYoga({
+export const postsGraph = createYoga({
     schema: buildSubgraphSchema({
       typeDefs: postsSchema,
       resolvers: resolvers as GraphQLResolverMap<any>,
     }),
     plugins: [],
     context: contextFactory(redisConnection, pgConnection),
-  }),
-);
+  });

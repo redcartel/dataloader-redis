@@ -2,6 +2,7 @@ import { RedisClientType } from "redis";
 import PostsLoaders from "../data-aggregation";
 import { Pool } from "pg";
 import AccountsLoaders from "backend-accounts-graph/src/data-aggregation";
+import PostRepository from "../data-access";
 
 export function contextFactory(
   redisConnection: RedisClientType,
@@ -13,6 +14,7 @@ export function contextFactory(
       account,
       loaders: new PostsLoaders(redisConnection, postgresConnection),
       accountLoaders: new AccountsLoaders(redisConnection, postgresConnection),
+      postRepository: new PostRepository(postgresConnection)
     };
   };
 }
