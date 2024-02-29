@@ -1,23 +1,23 @@
 import { config } from "common-values";
-import { AccountRepository, AccountType } from "../data-access";
+import { AccountRepository } from "../data-access";
 import DataLoaderRedis from "dataloader-redis";
 import { Pool } from "pg";
 import { RedisClientType } from "redis";
+import { PrismaClient } from "data-resources/src/prisma-connection";
+import { Prisma } from "data-resources/src/generated/prismaClient";
 
 export default class AccountsLoaders {
   private redis: RedisClientType;
-  private postgres: Pool;
 
   private repo: AccountRepository;
 
-  public accountById: DataLoaderRedis<string, AccountType>;
+  public accountById: DataLoaderRedis<string, Prisma.AccountGetPayload<{}>>;
 
-  constructor(redisConnection: RedisClientType, postgresConnection: Pool) {
+  constructor(redisConnection: RedisClientType, prisma: PrismaClient) {
     this.redis = redisConnection;
-    this.postgres = postgresConnection;
-    this.repo = new AccountRepository(this.postgres);
+    this.repo = new AccountRepository(prisma);
 
-    this.accountById = new DataLoaderRedis<string, AccountType>(
+    this.accountById = new DataLoaderRedis(
       this.redis,
       (ids: string[]) => this.repo.accountAggregate(ids),
       {

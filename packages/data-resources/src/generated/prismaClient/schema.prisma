@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prismaClient"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  email      String          @unique
+  username   String          @unique
+  profilePic String?
+  bio        String?
+  id         String          @id @db.Uuid
+  followedBy AccountFollow[] @relation("followee_relation")
+  follows    AccountFollow[] @relation("follower_relation")
+  posts      Post[]
+  likes      PostLike[]
+}
+
+model Post {
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  id        String     @id @db.Uuid
+  authorId  String     @db.Uuid
+  repostId  String?    @db.Uuid
+  author    Account    @relation(fields: [authorId], references: [id])
+  repost    Post?      @relation("repost_reference", fields: [repostId], references: [id])
+  reposts   Post[]     @relation("repost_reference")
+  Likes     PostLike[]
+
+  @@unique([authorId, createdAt])
+}
+
+model PostLike {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  postId    String   @db.Uuid
+  accountId String   @db.Uuid
+  account   Account  @relation(fields: [accountId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@unique([postId, accountId])
+}
+
+model AccountFollow {
+  id         String   @id
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  followerId String   @db.Uuid
+  followeeId String   @db.Uuid
+  followee   Account  @relation("followee_relation", fields: [followeeId], references: [id])
+  follower   Account  @relation("follower_relation", fields: [followerId], references: [id])
+
+  @@unique([followerId, followeeId])
+}

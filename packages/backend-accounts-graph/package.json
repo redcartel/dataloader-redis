@@ -5,15 +5,20 @@
   "scripts": {
     "server-build": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
     "server-dev": "ts-node-dev ./src/index.ts --transpileOnly",
-    "server-run": "node ./dist/index.js"
+    "server-run": "node ./dist/index.js",
+    "test": "ts-jest"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1",
     "@types/express": "^4",
+    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9",
     "@types/node": "^20.11.16",
     "@types/pg": "^8.11.0",
     "esbuild": "^0.20.0",
+    "jest": "^29.7.0",
+    "jest-mock-extended": "^3.0.5",
+    "ts-jest": "^29.1.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
@@ -32,6 +37,7 @@
     "graphql-yoga": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3",
+    "prisma": "^5.10.2",
     "redis": "^4.6.13"
   }
 }

@@ -1,54 +1,34 @@
-import { Pool } from "pg";
+import { PrismaClient } from "data-resources/src/prisma-connection";
 
-export interface AccountType {
-  id?: string;
-  email?: string;
-  username?: string;
-  created_at?: string;
-  updated_at?: string;
+const defaultSelect = {
+  id: true,
+  username: true,
+  email: true,
+  bio: true,
+  profilePic: true,
+  createdAt: true,
+  updatedAt: true
 }
 
 export class AccountRepository {
-  private connection: Pool;
+  private connection: PrismaClient;
 
-  constructor(pool: Pool) {
-    this.connection = pool;
+  constructor(prisma: PrismaClient) {
+    this.connection = prisma;
   }
 
-  private accountRowMap(row: any): AccountType {
-    return {
-      id: row.id,
-      username: row.username,
-      email: row.email,
-      created_at: row.created_at.toISOString(),
-      updated_at: row.updated_at.toISOString(),
-    };
+  async accounts() {
+    return await this.connection.account.findMany();
   }
 
   async accountById(id: string) {
-    const queryString = `SELECT id, email, username, created_at, updated_at FROM accounts WHERE id = $1 LIMIT 1`;
-    const result = await this.connection.query(queryString, [id]);
-    if (result.rows.length !== 1) {
-      return new Error("Not Found");
-    } else return this.accountRowMap(result.rows[0]);
-  }
-
-  async accountsPage(pageNumber = 0, pageSize = 10) {
-    const queryString = `SELECT id, email, username, created_at, updated_at FROM accounts LIMIT $1 OFFSET $2`;
-    const result = await this.connection.query(queryString, [
-      pageSize,
-      pageNumber * pageSize,
-    ]);
-    return result.rows.map((row) => this.accountRowMap(row));
+    return await this.connection.account.findUnique({ select: defaultSelect, where: { id } });
   }
 
   async accountAggregate(ids: string[]) {
-    const queryString = `SELECT id, email, username, created_at, updated_at FROM accounts WHERE id = ANY($1)`;
-    const result = await this.connection.query(queryString, [ids]);
-    let resultMap: { [key: string]: AccountType } = {};
-    result.rows.forEach(
-      (row) => (resultMap[row["id"]] = this.accountRowMap(row)),
-    );
-    return ids.map((id) => resultMap[id] ?? new Error("Not Found"));
+    const result = await this.connection.account.findMany({ select: defaultSelect, where: { id : {
+      in: ids
+    }}})
+    return result;
   }
 }
