@@ -4,13 +4,14 @@ import { RedisClientType } from "redis";
 import supertokens from "supertokens-node";
 import { config } from "common-values";
 import { IncomingHttpHeaders } from "http";
+import { PrismaClient } from "data-resources/src/generated/prismaClient";
 
 // TODO: simplify this
 export async function getAccountFromSession(
   session: any,
   headers: IncomingHttpHeaders,
   redis: RedisClientType,
-  postgres: Pool,
+  client: PrismaClient
 ) {
   let userId = session?.userId;
   if (!userId) {
@@ -24,7 +25,7 @@ export async function getAccountFromSession(
   }
   const redisKey = `sessionAccount:${userId}`;
   const redisUser = await redis.get(redisKey);
-  let accountData: { email?: string; id?: string } = {};
+  let accountData: { email?: string; id?: string, username?: string } = {};
   if (redisUser !== null && JSON.parse(redisUser)["email"]) {
     console.log(redisUser);
     return JSON.parse(redisUser) as typeof accountData;
@@ -32,38 +33,31 @@ export async function getAccountFromSession(
     const userData = await supertokens.getUser(userId);
     console.log(userData);
     if ((userData?.emails.length ?? 0) > 0) {
-      const query = `SELECT email, id FROM accounts WHERE id=$1`;
-      const result = await postgres.query(query, [userId]);
-      console.log("select, ", result.rows);
-      if (result.rows.length >= 1) {
-        if (result.rows[0]["email"] === userData!.emails[0]) {
+      const result = await client.account.findUnique({where: {id: userId}})
+      console.log("select, ", result);
+      if (result) {
+        if (result.email === userData!.emails[0]) {
           accountData = {
-            email: result.rows[0]["email"],
-            id: result.rows[0]["id"],
+            email: result.email,
+            id: result.id,
+            username: result.username
           };
         } else {
-          const updateQuery = `UPDATE accounts SET email = $1 WHERE id=$2 RETURNING email, id`;
-          const result = await postgres.query(updateQuery, [
-            userData!.emails[0],
-            userId,
-          ]);
-          console.log("update, ", result.rows);
+          const result = await client.account.update({select: { id: true, email: true, username: true}, where: { id: userId}, data: { email: userData!.emails[0] }})
+          console.log("update, ", result);
           accountData = {
-            email: result.rows[0]["email"],
-            id: result.rows[0]["id"],
+            email: result.email,
+            id: result.id,
+            username: result.username
           };
         }
       } else {
-        const insertQuery = `INSERT INTO accounts (id, email, username) VALUES ($1, $2, $3) RETURNING email, id`;
-        const result = await postgres.query(insertQuery, [
-          userId,
-          userData!.emails[0],
-          userData!.emails[0].slice(0, 15),
-        ]);
-        console.log("insert, ", result.rows);
+        const result = await client.account.create({ select: { id: true, username: true, email: true }, data: { id: userId, email: userData!.emails[0], username: userData!.emails[0]}})
+        console.log("insert, ", result);
         accountData = {
-          email: result.rows[0]["email"],
-          id: result.rows[0]["id"],
+          email: result.email,
+          id: result.username,
+          username: result.username
         };
       }
     }

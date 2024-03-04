@@ -3,24 +3,25 @@ import gql from "graphql-tag";
 export const postsSchema = gql`
   type Post @key(fields: "id") {
     id: ID!
-    accounts_id: ID!
-    body: String!
+    authorId: ID!
+    # body: String!
     author: Account!
-    created_at: String!
-    updated_at: String!
-    likes: [Like!]!
-    likes_count: Int!
+    createdAt: String!
+    updatedAt: String!
+    # likes: [Like!]!
+    # likes_count: Int!
   }
 
   type PostsWithCursor {
     posts: [Post!]!
-    cursor: String
+    cursorTimestamp: String
+    cursorId: String
   }
 
   type Like @key(fields: "id") {
     id: ID!
     posts_id: ID!
-    accounts_id: ID
+    accountsId: ID
     author: Account
     post: Post!
   }
@@ -33,7 +34,8 @@ export const postsSchema = gql`
 
   input PostsInput {
     accountId: String
-    cursor: String
+    cursorTimestamp: String
+    cursorId: String
   }
 
   type Query {

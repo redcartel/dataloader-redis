@@ -25,7 +25,8 @@ export const config = {
     devSpoof: !!(process.env['ALLOW_DEV_SPOOF'] ?? '0').match(/1|true/i)
   },
   backend: {
-    dataloaderTtl: parseInt(process.env["DATALOADER_TTL"] ?? `${24 * 60 * 60}`)
+    dataloaderTtl: parseInt(process.env["DATALOADER_TTL"] ?? `${24 * 60 * 60}`),
+    pageLimit: parseInt(process.env["PAGE_LIMIT"] ?? "20")
   },
   postgres: {
     host: process.env["POSTGRES_HOST"],

@@ -24,11 +24,6 @@ export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
  */
 export type Post = $Result.DefaultSelection<Prisma.$PostPayload>
 /**
- * Model PostLike
- * 
- */
-export type PostLike = $Result.DefaultSelection<Prisma.$PostLikePayload>
-/**
  * Model AccountFollow
  * 
  */
@@ -175,16 +170,6 @@ export class PrismaClient<
     * ```
     */
   get post(): Prisma.PostDelegate<ExtArgs>;
-
-  /**
-   * `prisma.postLike`: Exposes CRUD operations for the **PostLike** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more PostLikes
-    * const postLikes = await prisma.postLike.findMany()
-    * ```
-    */
-  get postLike(): Prisma.PostLikeDelegate<ExtArgs>;
 
   /**
    * `prisma.accountFollow`: Exposes CRUD operations for the **AccountFollow** model.
@@ -667,7 +652,6 @@ export namespace Prisma {
   export const ModelName: {
     Account: 'Account',
     Post: 'Post',
-    PostLike: 'PostLike',
     AccountFollow: 'AccountFollow'
   };
 
@@ -685,7 +669,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'account' | 'post' | 'postLike' | 'accountFollow'
+      modelProps: 'account' | 'post' | 'accountFollow'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -818,72 +802,6 @@ export namespace Prisma {
           count: {
             args: Prisma.PostCountArgs<ExtArgs>,
             result: $Utils.Optional<PostCountAggregateOutputType> | number
-          }
-        }
-      }
-      PostLike: {
-        payload: Prisma.$PostLikePayload<ExtArgs>
-        fields: Prisma.PostLikeFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PostLikeFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PostLikeFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>
-          }
-          findFirst: {
-            args: Prisma.PostLikeFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PostLikeFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>
-          }
-          findMany: {
-            args: Prisma.PostLikeFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>[]
-          }
-          create: {
-            args: Prisma.PostLikeCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>
-          }
-          createMany: {
-            args: Prisma.PostLikeCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.PostLikeDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>
-          }
-          update: {
-            args: Prisma.PostLikeUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>
-          }
-          deleteMany: {
-            args: Prisma.PostLikeDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PostLikeUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.PostLikeUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PostLikePayload>
-          }
-          aggregate: {
-            args: Prisma.PostLikeAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregatePostLike>
-          }
-          groupBy: {
-            args: Prisma.PostLikeGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<PostLikeGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PostLikeCountArgs<ExtArgs>,
-            result: $Utils.Optional<PostLikeCountAggregateOutputType> | number
           }
         }
       }
@@ -1115,14 +1033,12 @@ export namespace Prisma {
     followedBy: number
     follows: number
     posts: number
-    likes: number
   }
 
   export type AccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     followedBy?: boolean | AccountCountOutputTypeCountFollowedByArgs
     follows?: boolean | AccountCountOutputTypeCountFollowsArgs
     posts?: boolean | AccountCountOutputTypeCountPostsArgs
-    likes?: boolean | AccountCountOutputTypeCountLikesArgs
   }
 
   // Custom InputTypes
@@ -1159,58 +1075,6 @@ export namespace Prisma {
    */
   export type AccountCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
-  }
-
-
-  /**
-   * AccountCountOutputType without action
-   */
-  export type AccountCountOutputTypeCountLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostLikeWhereInput
-  }
-
-
-
-  /**
-   * Count Type PostCountOutputType
-   */
-
-  export type PostCountOutputType = {
-    reposts: number
-    Likes: number
-  }
-
-  export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    reposts?: boolean | PostCountOutputTypeCountRepostsArgs
-    Likes?: boolean | PostCountOutputTypeCountLikesArgs
-  }
-
-  // Custom InputTypes
-
-  /**
-   * PostCountOutputType without action
-   */
-  export type PostCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostCountOutputType
-     */
-    select?: PostCountOutputTypeSelect<ExtArgs> | null
-  }
-
-
-  /**
-   * PostCountOutputType without action
-   */
-  export type PostCountOutputTypeCountRepostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostWhereInput
-  }
-
-
-  /**
-   * PostCountOutputType without action
-   */
-  export type PostCountOutputTypeCountLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostLikeWhereInput
   }
 
 
@@ -1402,7 +1266,6 @@ export namespace Prisma {
     followedBy?: boolean | Account$followedByArgs<ExtArgs>
     follows?: boolean | Account$followsArgs<ExtArgs>
     posts?: boolean | Account$postsArgs<ExtArgs>
-    likes?: boolean | Account$likesArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -1420,7 +1283,6 @@ export namespace Prisma {
     followedBy?: boolean | Account$followedByArgs<ExtArgs>
     follows?: boolean | Account$followsArgs<ExtArgs>
     posts?: boolean | Account$postsArgs<ExtArgs>
-    likes?: boolean | Account$likesArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1431,7 +1293,6 @@ export namespace Prisma {
       followedBy: Prisma.$AccountFollowPayload<ExtArgs>[]
       follows: Prisma.$AccountFollowPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
-      likes: Prisma.$PostLikePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       createdAt: Date
@@ -1449,7 +1310,7 @@ export namespace Prisma {
   type AccountGetPayload<S extends boolean | null | undefined | AccountDefaultArgs> = $Result.GetResult<Prisma.$AccountPayload, S>
 
   type AccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AccountFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    Omit<AccountFindManyArgs, 'select' | 'include' | 'distinct' | 'relationLoadStrategy'> & {
       select?: AccountCountAggregateInputType | true
     }
 
@@ -1812,8 +1673,6 @@ export namespace Prisma {
 
     posts<T extends Account$postsArgs<ExtArgs> = {}>(args?: Subset<T, Account$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findMany'> | Null>;
 
-    likes<T extends Account$likesArgs<ExtArgs> = {}>(args?: Subset<T, Account$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findMany'> | Null>;
-
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1870,6 +1729,7 @@ export namespace Prisma {
      * Filter, which Account to fetch.
      */
     where: AccountWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -1889,6 +1749,7 @@ export namespace Prisma {
      * Filter, which Account to fetch.
      */
     where: AccountWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -1938,6 +1799,7 @@ export namespace Prisma {
      * Filter by unique combinations of Accounts.
      */
     distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -1987,6 +1849,7 @@ export namespace Prisma {
      * Filter by unique combinations of Accounts.
      */
     distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2031,6 +1894,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2050,6 +1914,7 @@ export namespace Prisma {
      * The data needed to create a Account.
      */
     data: XOR<AccountCreateInput, AccountUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2085,6 +1950,7 @@ export namespace Prisma {
      * Choose, which Account to update.
      */
     where: AccountWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2127,6 +1993,7 @@ export namespace Prisma {
      * In case the Account was found with the provided `where` argument, update it with this data.
      */
     update: XOR<AccountUpdateInput, AccountUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2146,6 +2013,7 @@ export namespace Prisma {
      * Filter which Account to delete.
      */
     where: AccountWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2224,27 +2092,6 @@ export namespace Prisma {
 
 
   /**
-   * Account.likes
-   */
-  export type Account$likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    where?: PostLikeWhereInput
-    orderBy?: PostLikeOrderByWithRelationInput | PostLikeOrderByWithRelationInput[]
-    cursor?: PostLikeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostLikeScalarFieldEnum | PostLikeScalarFieldEnum[]
-  }
-
-
-  /**
    * Account without action
    */
   export type AccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2275,6 +2122,7 @@ export namespace Prisma {
     updatedAt: Date | null
     id: string | null
     authorId: string | null
+    body: string | null
     repostId: string | null
   }
 
@@ -2283,6 +2131,7 @@ export namespace Prisma {
     updatedAt: Date | null
     id: string | null
     authorId: string | null
+    body: string | null
     repostId: string | null
   }
 
@@ -2291,6 +2140,7 @@ export namespace Prisma {
     updatedAt: number
     id: number
     authorId: number
+    body: number
     repostId: number
     _all: number
   }
@@ -2301,6 +2151,7 @@ export namespace Prisma {
     updatedAt?: true
     id?: true
     authorId?: true
+    body?: true
     repostId?: true
   }
 
@@ -2309,6 +2160,7 @@ export namespace Prisma {
     updatedAt?: true
     id?: true
     authorId?: true
+    body?: true
     repostId?: true
   }
 
@@ -2317,6 +2169,7 @@ export namespace Prisma {
     updatedAt?: true
     id?: true
     authorId?: true
+    body?: true
     repostId?: true
     _all?: true
   }
@@ -2398,6 +2251,7 @@ export namespace Prisma {
     updatedAt: Date
     id: string
     authorId: string
+    body: string
     repostId: string | null
     _count: PostCountAggregateOutputType | null
     _min: PostMinAggregateOutputType | null
@@ -2423,12 +2277,9 @@ export namespace Prisma {
     updatedAt?: boolean
     id?: boolean
     authorId?: boolean
+    body?: boolean
     repostId?: boolean
     author?: boolean | AccountDefaultArgs<ExtArgs>
-    repost?: boolean | Post$repostArgs<ExtArgs>
-    reposts?: boolean | Post$repostsArgs<ExtArgs>
-    Likes?: boolean | Post$LikesArgs<ExtArgs>
-    _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
   export type PostSelectScalar = {
@@ -2436,15 +2287,12 @@ export namespace Prisma {
     updatedAt?: boolean
     id?: boolean
     authorId?: boolean
+    body?: boolean
     repostId?: boolean
   }
 
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | AccountDefaultArgs<ExtArgs>
-    repost?: boolean | Post$repostArgs<ExtArgs>
-    reposts?: boolean | Post$repostsArgs<ExtArgs>
-    Likes?: boolean | Post$LikesArgs<ExtArgs>
-    _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
 
 
@@ -2452,15 +2300,13 @@ export namespace Prisma {
     name: "Post"
     objects: {
       author: Prisma.$AccountPayload<ExtArgs>
-      repost: Prisma.$PostPayload<ExtArgs> | null
-      reposts: Prisma.$PostPayload<ExtArgs>[]
-      Likes: Prisma.$PostLikePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       createdAt: Date
       updatedAt: Date
       id: string
       authorId: string
+      body: string
       repostId: string | null
     }, ExtArgs["result"]["post"]>
     composites: {}
@@ -2470,7 +2316,7 @@ export namespace Prisma {
   type PostGetPayload<S extends boolean | null | undefined | PostDefaultArgs> = $Result.GetResult<Prisma.$PostPayload, S>
 
   type PostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<PostFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    Omit<PostFindManyArgs, 'select' | 'include' | 'distinct' | 'relationLoadStrategy'> & {
       select?: PostCountAggregateInputType | true
     }
 
@@ -2829,12 +2675,6 @@ export namespace Prisma {
 
     author<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
-    repost<T extends Post$repostArgs<ExtArgs> = {}>(args?: Subset<T, Post$repostArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
-
-    reposts<T extends Post$repostsArgs<ExtArgs> = {}>(args?: Subset<T, Post$repostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    Likes<T extends Post$LikesArgs<ExtArgs> = {}>(args?: Subset<T, Post$LikesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findMany'> | Null>;
-
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2867,6 +2707,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Post", 'DateTime'>
     readonly id: FieldRef<"Post", 'String'>
     readonly authorId: FieldRef<"Post", 'String'>
+    readonly body: FieldRef<"Post", 'String'>
     readonly repostId: FieldRef<"Post", 'String'>
   }
     
@@ -2889,6 +2730,7 @@ export namespace Prisma {
      * Filter, which Post to fetch.
      */
     where: PostWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2908,6 +2750,7 @@ export namespace Prisma {
      * Filter, which Post to fetch.
      */
     where: PostWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -2957,6 +2800,7 @@ export namespace Prisma {
      * Filter by unique combinations of Posts.
      */
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3006,6 +2850,7 @@ export namespace Prisma {
      * Filter by unique combinations of Posts.
      */
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3050,6 +2895,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3069,6 +2915,7 @@ export namespace Prisma {
      * The data needed to create a Post.
      */
     data: XOR<PostCreateInput, PostUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3104,6 +2951,7 @@ export namespace Prisma {
      * Choose, which Post to update.
      */
     where: PostWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3146,6 +2994,7 @@ export namespace Prisma {
      * In case the Post was found with the provided `where` argument, update it with this data.
      */
     update: XOR<PostUpdateInput, PostUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3165,6 +3014,7 @@ export namespace Prisma {
      * Filter which Post to delete.
      */
     where: PostWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -3180,64 +3030,6 @@ export namespace Prisma {
 
 
   /**
-   * Post.repost
-   */
-  export type Post$repostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Post
-     */
-    select?: PostSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostInclude<ExtArgs> | null
-    where?: PostWhereInput
-  }
-
-
-  /**
-   * Post.reposts
-   */
-  export type Post$repostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Post
-     */
-    select?: PostSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostInclude<ExtArgs> | null
-    where?: PostWhereInput
-    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
-    cursor?: PostWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
-  }
-
-
-  /**
-   * Post.Likes
-   */
-  export type Post$LikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    where?: PostLikeWhereInput
-    orderBy?: PostLikeOrderByWithRelationInput | PostLikeOrderByWithRelationInput[]
-    cursor?: PostLikeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostLikeScalarFieldEnum | PostLikeScalarFieldEnum[]
-  }
-
-
-  /**
    * Post without action
    */
   export type PostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3249,929 +3041,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: PostInclude<ExtArgs> | null
-  }
-
-
-
-  /**
-   * Model PostLike
-   */
-
-  export type AggregatePostLike = {
-    _count: PostLikeCountAggregateOutputType | null
-    _min: PostLikeMinAggregateOutputType | null
-    _max: PostLikeMaxAggregateOutputType | null
-  }
-
-  export type PostLikeMinAggregateOutputType = {
-    id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    postId: string | null
-    accountId: string | null
-  }
-
-  export type PostLikeMaxAggregateOutputType = {
-    id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    postId: string | null
-    accountId: string | null
-  }
-
-  export type PostLikeCountAggregateOutputType = {
-    id: number
-    createdAt: number
-    updatedAt: number
-    postId: number
-    accountId: number
-    _all: number
-  }
-
-
-  export type PostLikeMinAggregateInputType = {
-    id?: true
-    createdAt?: true
-    updatedAt?: true
-    postId?: true
-    accountId?: true
-  }
-
-  export type PostLikeMaxAggregateInputType = {
-    id?: true
-    createdAt?: true
-    updatedAt?: true
-    postId?: true
-    accountId?: true
-  }
-
-  export type PostLikeCountAggregateInputType = {
-    id?: true
-    createdAt?: true
-    updatedAt?: true
-    postId?: true
-    accountId?: true
-    _all?: true
-  }
-
-  export type PostLikeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PostLike to aggregate.
-     */
-    where?: PostLikeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PostLikes to fetch.
-     */
-    orderBy?: PostLikeOrderByWithRelationInput | PostLikeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PostLikeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PostLikes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PostLikes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned PostLikes
-    **/
-    _count?: true | PostLikeCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PostLikeMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PostLikeMaxAggregateInputType
-  }
-
-  export type GetPostLikeAggregateType<T extends PostLikeAggregateArgs> = {
-        [P in keyof T & keyof AggregatePostLike]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePostLike[P]>
-      : GetScalarType<T[P], AggregatePostLike[P]>
-  }
-
-
-
-
-  export type PostLikeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostLikeWhereInput
-    orderBy?: PostLikeOrderByWithAggregationInput | PostLikeOrderByWithAggregationInput[]
-    by: PostLikeScalarFieldEnum[] | PostLikeScalarFieldEnum
-    having?: PostLikeScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PostLikeCountAggregateInputType | true
-    _min?: PostLikeMinAggregateInputType
-    _max?: PostLikeMaxAggregateInputType
-  }
-
-  export type PostLikeGroupByOutputType = {
-    id: string
-    createdAt: Date
-    updatedAt: Date
-    postId: string
-    accountId: string
-    _count: PostLikeCountAggregateOutputType | null
-    _min: PostLikeMinAggregateOutputType | null
-    _max: PostLikeMaxAggregateOutputType | null
-  }
-
-  type GetPostLikeGroupByPayload<T extends PostLikeGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PostLikeGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PostLikeGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PostLikeGroupByOutputType[P]>
-            : GetScalarType<T[P], PostLikeGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PostLikeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    postId?: boolean
-    accountId?: boolean
-    account?: boolean | AccountDefaultArgs<ExtArgs>
-    post?: boolean | PostDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["postLike"]>
-
-  export type PostLikeSelectScalar = {
-    id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    postId?: boolean
-    accountId?: boolean
-  }
-
-  export type PostLikeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    account?: boolean | AccountDefaultArgs<ExtArgs>
-    post?: boolean | PostDefaultArgs<ExtArgs>
-  }
-
-
-  export type $PostLikePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "PostLike"
-    objects: {
-      account: Prisma.$AccountPayload<ExtArgs>
-      post: Prisma.$PostPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      createdAt: Date
-      updatedAt: Date
-      postId: string
-      accountId: string
-    }, ExtArgs["result"]["postLike"]>
-    composites: {}
-  }
-
-
-  type PostLikeGetPayload<S extends boolean | null | undefined | PostLikeDefaultArgs> = $Result.GetResult<Prisma.$PostLikePayload, S>
-
-  type PostLikeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<PostLikeFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: PostLikeCountAggregateInputType | true
-    }
-
-  export interface PostLikeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PostLike'], meta: { name: 'PostLike' } }
-    /**
-     * Find zero or one PostLike that matches the filter.
-     * @param {PostLikeFindUniqueArgs} args - Arguments to find a PostLike
-     * @example
-     * // Get one PostLike
-     * const postLike = await prisma.postLike.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends PostLikeFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, PostLikeFindUniqueArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one PostLike that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {PostLikeFindUniqueOrThrowArgs} args - Arguments to find a PostLike
-     * @example
-     * // Get one PostLike
-     * const postLike = await prisma.postLike.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends PostLikeFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, PostLikeFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first PostLike that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeFindFirstArgs} args - Arguments to find a PostLike
-     * @example
-     * // Get one PostLike
-     * const postLike = await prisma.postLike.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends PostLikeFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, PostLikeFindFirstArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first PostLike that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeFindFirstOrThrowArgs} args - Arguments to find a PostLike
-     * @example
-     * // Get one PostLike
-     * const postLike = await prisma.postLike.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends PostLikeFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, PostLikeFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more PostLikes that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all PostLikes
-     * const postLikes = await prisma.postLike.findMany()
-     * 
-     * // Get first 10 PostLikes
-     * const postLikes = await prisma.postLike.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const postLikeWithIdOnly = await prisma.postLike.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends PostLikeFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PostLikeFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a PostLike.
-     * @param {PostLikeCreateArgs} args - Arguments to create a PostLike.
-     * @example
-     * // Create one PostLike
-     * const PostLike = await prisma.postLike.create({
-     *   data: {
-     *     // ... data to create a PostLike
-     *   }
-     * })
-     * 
-    **/
-    create<T extends PostLikeCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, PostLikeCreateArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many PostLikes.
-     *     @param {PostLikeCreateManyArgs} args - Arguments to create many PostLikes.
-     *     @example
-     *     // Create many PostLikes
-     *     const postLike = await prisma.postLike.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends PostLikeCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PostLikeCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a PostLike.
-     * @param {PostLikeDeleteArgs} args - Arguments to delete one PostLike.
-     * @example
-     * // Delete one PostLike
-     * const PostLike = await prisma.postLike.delete({
-     *   where: {
-     *     // ... filter to delete one PostLike
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends PostLikeDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, PostLikeDeleteArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one PostLike.
-     * @param {PostLikeUpdateArgs} args - Arguments to update one PostLike.
-     * @example
-     * // Update one PostLike
-     * const postLike = await prisma.postLike.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends PostLikeUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, PostLikeUpdateArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more PostLikes.
-     * @param {PostLikeDeleteManyArgs} args - Arguments to filter PostLikes to delete.
-     * @example
-     * // Delete a few PostLikes
-     * const { count } = await prisma.postLike.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends PostLikeDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PostLikeDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PostLikes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many PostLikes
-     * const postLike = await prisma.postLike.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends PostLikeUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, PostLikeUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one PostLike.
-     * @param {PostLikeUpsertArgs} args - Arguments to update or create a PostLike.
-     * @example
-     * // Update or create a PostLike
-     * const postLike = await prisma.postLike.upsert({
-     *   create: {
-     *     // ... data to create a PostLike
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the PostLike we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends PostLikeUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, PostLikeUpsertArgs<ExtArgs>>
-    ): Prisma__PostLikeClient<$Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of PostLikes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeCountArgs} args - Arguments to filter PostLikes to count.
-     * @example
-     * // Count the number of PostLikes
-     * const count = await prisma.postLike.count({
-     *   where: {
-     *     // ... the filter for the PostLikes we want to count
-     *   }
-     * })
-    **/
-    count<T extends PostLikeCountArgs>(
-      args?: Subset<T, PostLikeCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PostLikeCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a PostLike.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PostLikeAggregateArgs>(args: Subset<T, PostLikeAggregateArgs>): Prisma.PrismaPromise<GetPostLikeAggregateType<T>>
-
-    /**
-     * Group by PostLike.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PostLikeGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PostLikeGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PostLikeGroupByArgs['orderBy'] }
-        : { orderBy?: PostLikeGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PostLikeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPostLikeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the PostLike model
-   */
-  readonly fields: PostLikeFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for PostLike.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PostLikeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    account<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the PostLike model
-   */ 
-  interface PostLikeFieldRefs {
-    readonly id: FieldRef<"PostLike", 'String'>
-    readonly createdAt: FieldRef<"PostLike", 'DateTime'>
-    readonly updatedAt: FieldRef<"PostLike", 'DateTime'>
-    readonly postId: FieldRef<"PostLike", 'String'>
-    readonly accountId: FieldRef<"PostLike", 'String'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * PostLike findUnique
-   */
-  export type PostLikeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * Filter, which PostLike to fetch.
-     */
-    where: PostLikeWhereUniqueInput
-  }
-
-
-  /**
-   * PostLike findUniqueOrThrow
-   */
-  export type PostLikeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * Filter, which PostLike to fetch.
-     */
-    where: PostLikeWhereUniqueInput
-  }
-
-
-  /**
-   * PostLike findFirst
-   */
-  export type PostLikeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * Filter, which PostLike to fetch.
-     */
-    where?: PostLikeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PostLikes to fetch.
-     */
-    orderBy?: PostLikeOrderByWithRelationInput | PostLikeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PostLikes.
-     */
-    cursor?: PostLikeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PostLikes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PostLikes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PostLikes.
-     */
-    distinct?: PostLikeScalarFieldEnum | PostLikeScalarFieldEnum[]
-  }
-
-
-  /**
-   * PostLike findFirstOrThrow
-   */
-  export type PostLikeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * Filter, which PostLike to fetch.
-     */
-    where?: PostLikeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PostLikes to fetch.
-     */
-    orderBy?: PostLikeOrderByWithRelationInput | PostLikeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PostLikes.
-     */
-    cursor?: PostLikeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PostLikes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PostLikes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PostLikes.
-     */
-    distinct?: PostLikeScalarFieldEnum | PostLikeScalarFieldEnum[]
-  }
-
-
-  /**
-   * PostLike findMany
-   */
-  export type PostLikeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * Filter, which PostLikes to fetch.
-     */
-    where?: PostLikeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PostLikes to fetch.
-     */
-    orderBy?: PostLikeOrderByWithRelationInput | PostLikeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing PostLikes.
-     */
-    cursor?: PostLikeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PostLikes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PostLikes.
-     */
-    skip?: number
-    distinct?: PostLikeScalarFieldEnum | PostLikeScalarFieldEnum[]
-  }
-
-
-  /**
-   * PostLike create
-   */
-  export type PostLikeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * The data needed to create a PostLike.
-     */
-    data: XOR<PostLikeCreateInput, PostLikeUncheckedCreateInput>
-  }
-
-
-  /**
-   * PostLike createMany
-   */
-  export type PostLikeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many PostLikes.
-     */
-    data: PostLikeCreateManyInput | PostLikeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * PostLike update
-   */
-  export type PostLikeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * The data needed to update a PostLike.
-     */
-    data: XOR<PostLikeUpdateInput, PostLikeUncheckedUpdateInput>
-    /**
-     * Choose, which PostLike to update.
-     */
-    where: PostLikeWhereUniqueInput
-  }
-
-
-  /**
-   * PostLike updateMany
-   */
-  export type PostLikeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update PostLikes.
-     */
-    data: XOR<PostLikeUpdateManyMutationInput, PostLikeUncheckedUpdateManyInput>
-    /**
-     * Filter which PostLikes to update
-     */
-    where?: PostLikeWhereInput
-  }
-
-
-  /**
-   * PostLike upsert
-   */
-  export type PostLikeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * The filter to search for the PostLike to update in case it exists.
-     */
-    where: PostLikeWhereUniqueInput
-    /**
-     * In case the PostLike found by the `where` argument doesn't exist, create a new PostLike with this data.
-     */
-    create: XOR<PostLikeCreateInput, PostLikeUncheckedCreateInput>
-    /**
-     * In case the PostLike was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PostLikeUpdateInput, PostLikeUncheckedUpdateInput>
-  }
-
-
-  /**
-   * PostLike delete
-   */
-  export type PostLikeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
-    /**
-     * Filter which PostLike to delete.
-     */
-    where: PostLikeWhereUniqueInput
-  }
-
-
-  /**
-   * PostLike deleteMany
-   */
-  export type PostLikeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PostLikes to delete
-     */
-    where?: PostLikeWhereInput
-  }
-
-
-  /**
-   * PostLike without action
-   */
-  export type PostLikeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PostLike
-     */
-    select?: PostLikeSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostLikeInclude<ExtArgs> | null
   }
 
 
@@ -4378,7 +3247,7 @@ export namespace Prisma {
   type AccountFollowGetPayload<S extends boolean | null | undefined | AccountFollowDefaultArgs> = $Result.GetResult<Prisma.$AccountFollowPayload, S>
 
   type AccountFollowCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AccountFollowFindManyArgs, 'select' | 'include' | 'distinct'> & {
+    Omit<AccountFollowFindManyArgs, 'select' | 'include' | 'distinct' | 'relationLoadStrategy'> & {
       select?: AccountFollowCountAggregateInputType | true
     }
 
@@ -4793,6 +3662,7 @@ export namespace Prisma {
      * Filter, which AccountFollow to fetch.
      */
     where: AccountFollowWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -4812,6 +3682,7 @@ export namespace Prisma {
      * Filter, which AccountFollow to fetch.
      */
     where: AccountFollowWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -4861,6 +3732,7 @@ export namespace Prisma {
      * Filter by unique combinations of AccountFollows.
      */
     distinct?: AccountFollowScalarFieldEnum | AccountFollowScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -4910,6 +3782,7 @@ export namespace Prisma {
      * Filter by unique combinations of AccountFollows.
      */
     distinct?: AccountFollowScalarFieldEnum | AccountFollowScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -4954,6 +3827,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: AccountFollowScalarFieldEnum | AccountFollowScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -4973,6 +3847,7 @@ export namespace Prisma {
      * The data needed to create a AccountFollow.
      */
     data: XOR<AccountFollowCreateInput, AccountFollowUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -5008,6 +3883,7 @@ export namespace Prisma {
      * Choose, which AccountFollow to update.
      */
     where: AccountFollowWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -5050,6 +3926,7 @@ export namespace Prisma {
      * In case the AccountFollow was found with the provided `where` argument, update it with this data.
      */
     update: XOR<AccountFollowUpdateInput, AccountFollowUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -5069,6 +3946,7 @@ export namespace Prisma {
      * Filter which AccountFollow to delete.
      */
     where: AccountFollowWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
 
@@ -5126,26 +4004,24 @@ export namespace Prisma {
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
+  export const RelationLoadStrategy: {
+    query: 'query',
+    join: 'join'
+  };
+
+  export type RelationLoadStrategy = (typeof RelationLoadStrategy)[keyof typeof RelationLoadStrategy]
+
+
   export const PostScalarFieldEnum: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     id: 'id',
     authorId: 'authorId',
+    body: 'body',
     repostId: 'repostId'
   };
 
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
-
-
-  export const PostLikeScalarFieldEnum: {
-    id: 'id',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    postId: 'postId',
-    accountId: 'accountId'
-  };
-
-  export type PostLikeScalarFieldEnum = (typeof PostLikeScalarFieldEnum)[keyof typeof PostLikeScalarFieldEnum]
 
 
   export const AccountFollowScalarFieldEnum: {
@@ -5247,7 +4123,6 @@ export namespace Prisma {
     followedBy?: AccountFollowListRelationFilter
     follows?: AccountFollowListRelationFilter
     posts?: PostListRelationFilter
-    likes?: PostLikeListRelationFilter
   }
 
   export type AccountOrderByWithRelationInput = {
@@ -5261,7 +4136,6 @@ export namespace Prisma {
     followedBy?: AccountFollowOrderByRelationAggregateInput
     follows?: AccountFollowOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
-    likes?: PostLikeOrderByRelationAggregateInput
   }
 
   export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -5278,7 +4152,6 @@ export namespace Prisma {
     followedBy?: AccountFollowListRelationFilter
     follows?: AccountFollowListRelationFilter
     posts?: PostListRelationFilter
-    likes?: PostLikeListRelationFilter
   }, "id" | "email" | "username">
 
   export type AccountOrderByWithAggregationInput = {
@@ -5315,11 +4188,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     id?: UuidFilter<"Post"> | string
     authorId?: UuidFilter<"Post"> | string
+    body?: StringFilter<"Post"> | string
     repostId?: UuidNullableFilter<"Post"> | string | null
     author?: XOR<AccountRelationFilter, AccountWhereInput>
-    repost?: XOR<PostNullableRelationFilter, PostWhereInput> | null
-    reposts?: PostListRelationFilter
-    Likes?: PostLikeListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
@@ -5327,11 +4198,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     id?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     repostId?: SortOrderInput | SortOrder
     author?: AccountOrderByWithRelationInput
-    repost?: PostOrderByWithRelationInput
-    reposts?: PostOrderByRelationAggregateInput
-    Likes?: PostLikeOrderByRelationAggregateInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -5343,11 +4212,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     authorId?: UuidFilter<"Post"> | string
+    body?: StringFilter<"Post"> | string
     repostId?: UuidNullableFilter<"Post"> | string | null
     author?: XOR<AccountRelationFilter, AccountWhereInput>
-    repost?: XOR<PostNullableRelationFilter, PostWhereInput> | null
-    reposts?: PostListRelationFilter
-    Likes?: PostLikeListRelationFilter
   }, "id" | "authorId_createdAt">
 
   export type PostOrderByWithAggregationInput = {
@@ -5355,6 +4222,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     id?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     repostId?: SortOrderInput | SortOrder
     _count?: PostCountOrderByAggregateInput
     _max?: PostMaxOrderByAggregateInput
@@ -5369,66 +4237,8 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     id?: UuidWithAggregatesFilter<"Post"> | string
     authorId?: UuidWithAggregatesFilter<"Post"> | string
+    body?: StringWithAggregatesFilter<"Post"> | string
     repostId?: UuidNullableWithAggregatesFilter<"Post"> | string | null
-  }
-
-  export type PostLikeWhereInput = {
-    AND?: PostLikeWhereInput | PostLikeWhereInput[]
-    OR?: PostLikeWhereInput[]
-    NOT?: PostLikeWhereInput | PostLikeWhereInput[]
-    id?: StringFilter<"PostLike"> | string
-    createdAt?: DateTimeFilter<"PostLike"> | Date | string
-    updatedAt?: DateTimeFilter<"PostLike"> | Date | string
-    postId?: UuidFilter<"PostLike"> | string
-    accountId?: UuidFilter<"PostLike"> | string
-    account?: XOR<AccountRelationFilter, AccountWhereInput>
-    post?: XOR<PostRelationFilter, PostWhereInput>
-  }
-
-  export type PostLikeOrderByWithRelationInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    postId?: SortOrder
-    accountId?: SortOrder
-    account?: AccountOrderByWithRelationInput
-    post?: PostOrderByWithRelationInput
-  }
-
-  export type PostLikeWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    postId_accountId?: PostLikePostIdAccountIdCompoundUniqueInput
-    AND?: PostLikeWhereInput | PostLikeWhereInput[]
-    OR?: PostLikeWhereInput[]
-    NOT?: PostLikeWhereInput | PostLikeWhereInput[]
-    createdAt?: DateTimeFilter<"PostLike"> | Date | string
-    updatedAt?: DateTimeFilter<"PostLike"> | Date | string
-    postId?: UuidFilter<"PostLike"> | string
-    accountId?: UuidFilter<"PostLike"> | string
-    account?: XOR<AccountRelationFilter, AccountWhereInput>
-    post?: XOR<PostRelationFilter, PostWhereInput>
-  }, "id" | "postId_accountId">
-
-  export type PostLikeOrderByWithAggregationInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    postId?: SortOrder
-    accountId?: SortOrder
-    _count?: PostLikeCountOrderByAggregateInput
-    _max?: PostLikeMaxOrderByAggregateInput
-    _min?: PostLikeMinOrderByAggregateInput
-  }
-
-  export type PostLikeScalarWhereWithAggregatesInput = {
-    AND?: PostLikeScalarWhereWithAggregatesInput | PostLikeScalarWhereWithAggregatesInput[]
-    OR?: PostLikeScalarWhereWithAggregatesInput[]
-    NOT?: PostLikeScalarWhereWithAggregatesInput | PostLikeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PostLike"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"PostLike"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"PostLike"> | Date | string
-    postId?: UuidWithAggregatesFilter<"PostLike"> | string
-    accountId?: UuidWithAggregatesFilter<"PostLike"> | string
   }
 
   export type AccountFollowWhereInput = {
@@ -5501,7 +4311,6 @@ export namespace Prisma {
     followedBy?: AccountFollowCreateNestedManyWithoutFolloweeInput
     follows?: AccountFollowCreateNestedManyWithoutFollowerInput
     posts?: PostCreateNestedManyWithoutAuthorInput
-    likes?: PostLikeCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUncheckedCreateInput = {
@@ -5515,7 +4324,6 @@ export namespace Prisma {
     followedBy?: AccountFollowUncheckedCreateNestedManyWithoutFolloweeInput
     follows?: AccountFollowUncheckedCreateNestedManyWithoutFollowerInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    likes?: PostLikeUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUpdateInput = {
@@ -5529,7 +4337,6 @@ export namespace Prisma {
     followedBy?: AccountFollowUpdateManyWithoutFolloweeNestedInput
     follows?: AccountFollowUpdateManyWithoutFollowerNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
-    likes?: PostLikeUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateInput = {
@@ -5543,7 +4350,6 @@ export namespace Prisma {
     followedBy?: AccountFollowUncheckedUpdateManyWithoutFolloweeNestedInput
     follows?: AccountFollowUncheckedUpdateManyWithoutFollowerNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    likes?: PostLikeUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountCreateManyInput = {
@@ -5580,10 +4386,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     id: string
+    body: string
+    repostId?: string | null
     author: AccountCreateNestedOneWithoutPostsInput
-    repost?: PostCreateNestedOneWithoutRepostsInput
-    reposts?: PostCreateNestedManyWithoutRepostInput
-    Likes?: PostLikeCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
@@ -5591,19 +4396,17 @@ export namespace Prisma {
     updatedAt?: Date | string
     id: string
     authorId: string
+    body: string
     repostId?: string | null
-    reposts?: PostUncheckedCreateNestedManyWithoutRepostInput
-    Likes?: PostLikeUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    repostId?: NullableStringFieldUpdateOperationsInput | string | null
     author?: AccountUpdateOneRequiredWithoutPostsNestedInput
-    repost?: PostUpdateOneWithoutRepostsNestedInput
-    reposts?: PostUpdateManyWithoutRepostNestedInput
-    Likes?: PostLikeUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
@@ -5611,9 +4414,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     repostId?: NullableStringFieldUpdateOperationsInput | string | null
-    reposts?: PostUncheckedUpdateManyWithoutRepostNestedInput
-    Likes?: PostLikeUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
@@ -5621,6 +4423,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     id: string
     authorId: string
+    body: string
     repostId?: string | null
   }
 
@@ -5628,6 +4431,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    repostId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PostUncheckedUpdateManyInput = {
@@ -5635,61 +4440,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     repostId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PostLikeCreateInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    account: AccountCreateNestedOneWithoutLikesInput
-    post: PostCreateNestedOneWithoutLikesInput
-  }
-
-  export type PostLikeUncheckedCreateInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    postId: string
-    accountId: string
-  }
-
-  export type PostLikeUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    account?: AccountUpdateOneRequiredWithoutLikesNestedInput
-    post?: PostUpdateOneRequiredWithoutLikesNestedInput
-  }
-
-  export type PostLikeUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    postId?: StringFieldUpdateOperationsInput | string
-    accountId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PostLikeCreateManyInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    postId: string
-    accountId: string
-  }
-
-  export type PostLikeUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PostLikeUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    postId?: StringFieldUpdateOperationsInput | string
-    accountId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AccountFollowCreateInput = {
@@ -5811,12 +4563,6 @@ export namespace Prisma {
     none?: PostWhereInput
   }
 
-  export type PostLikeListRelationFilter = {
-    every?: PostLikeWhereInput
-    some?: PostLikeWhereInput
-    none?: PostLikeWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -5827,10 +4573,6 @@ export namespace Prisma {
   }
 
   export type PostOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PostLikeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5946,11 +4688,6 @@ export namespace Prisma {
     isNot?: AccountWhereInput
   }
 
-  export type PostNullableRelationFilter = {
-    is?: PostWhereInput | null
-    isNot?: PostWhereInput | null
-  }
-
   export type PostAuthorIdCreatedAtCompoundUniqueInput = {
     authorId: string
     createdAt: Date | string
@@ -5961,6 +4698,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     id?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     repostId?: SortOrder
   }
 
@@ -5969,6 +4707,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     id?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     repostId?: SortOrder
   }
 
@@ -5977,6 +4716,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     id?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     repostId?: SortOrder
   }
 
@@ -5993,40 +4733,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type PostRelationFilter = {
-    is?: PostWhereInput
-    isNot?: PostWhereInput
-  }
-
-  export type PostLikePostIdAccountIdCompoundUniqueInput = {
-    postId: string
-    accountId: string
-  }
-
-  export type PostLikeCountOrderByAggregateInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    postId?: SortOrder
-    accountId?: SortOrder
-  }
-
-  export type PostLikeMaxOrderByAggregateInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    postId?: SortOrder
-    accountId?: SortOrder
-  }
-
-  export type PostLikeMinOrderByAggregateInput = {
-    id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    postId?: SortOrder
-    accountId?: SortOrder
   }
 
   export type AccountFollowFollowerIdFolloweeIdCompoundUniqueInput = {
@@ -6079,13 +4785,6 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
-  export type PostLikeCreateNestedManyWithoutAccountInput = {
-    create?: XOR<PostLikeCreateWithoutAccountInput, PostLikeUncheckedCreateWithoutAccountInput> | PostLikeCreateWithoutAccountInput[] | PostLikeUncheckedCreateWithoutAccountInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutAccountInput | PostLikeCreateOrConnectWithoutAccountInput[]
-    createMany?: PostLikeCreateManyAccountInputEnvelope
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-  }
-
   export type AccountFollowUncheckedCreateNestedManyWithoutFolloweeInput = {
     create?: XOR<AccountFollowCreateWithoutFolloweeInput, AccountFollowUncheckedCreateWithoutFolloweeInput> | AccountFollowCreateWithoutFolloweeInput[] | AccountFollowUncheckedCreateWithoutFolloweeInput[]
     connectOrCreate?: AccountFollowCreateOrConnectWithoutFolloweeInput | AccountFollowCreateOrConnectWithoutFolloweeInput[]
@@ -6105,13 +4804,6 @@ export namespace Prisma {
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
     createMany?: PostCreateManyAuthorInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type PostLikeUncheckedCreateNestedManyWithoutAccountInput = {
-    create?: XOR<PostLikeCreateWithoutAccountInput, PostLikeUncheckedCreateWithoutAccountInput> | PostLikeCreateWithoutAccountInput[] | PostLikeUncheckedCreateWithoutAccountInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutAccountInput | PostLikeCreateOrConnectWithoutAccountInput[]
-    createMany?: PostLikeCreateManyAccountInputEnvelope
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -6168,20 +4860,6 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
-  export type PostLikeUpdateManyWithoutAccountNestedInput = {
-    create?: XOR<PostLikeCreateWithoutAccountInput, PostLikeUncheckedCreateWithoutAccountInput> | PostLikeCreateWithoutAccountInput[] | PostLikeUncheckedCreateWithoutAccountInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutAccountInput | PostLikeCreateOrConnectWithoutAccountInput[]
-    upsert?: PostLikeUpsertWithWhereUniqueWithoutAccountInput | PostLikeUpsertWithWhereUniqueWithoutAccountInput[]
-    createMany?: PostLikeCreateManyAccountInputEnvelope
-    set?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    disconnect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    delete?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    update?: PostLikeUpdateWithWhereUniqueWithoutAccountInput | PostLikeUpdateWithWhereUniqueWithoutAccountInput[]
-    updateMany?: PostLikeUpdateManyWithWhereWithoutAccountInput | PostLikeUpdateManyWithWhereWithoutAccountInput[]
-    deleteMany?: PostLikeScalarWhereInput | PostLikeScalarWhereInput[]
-  }
-
   export type AccountFollowUncheckedUpdateManyWithoutFolloweeNestedInput = {
     create?: XOR<AccountFollowCreateWithoutFolloweeInput, AccountFollowUncheckedCreateWithoutFolloweeInput> | AccountFollowCreateWithoutFolloweeInput[] | AccountFollowUncheckedCreateWithoutFolloweeInput[]
     connectOrCreate?: AccountFollowCreateOrConnectWithoutFolloweeInput | AccountFollowCreateOrConnectWithoutFolloweeInput[]
@@ -6224,58 +4902,10 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
-  export type PostLikeUncheckedUpdateManyWithoutAccountNestedInput = {
-    create?: XOR<PostLikeCreateWithoutAccountInput, PostLikeUncheckedCreateWithoutAccountInput> | PostLikeCreateWithoutAccountInput[] | PostLikeUncheckedCreateWithoutAccountInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutAccountInput | PostLikeCreateOrConnectWithoutAccountInput[]
-    upsert?: PostLikeUpsertWithWhereUniqueWithoutAccountInput | PostLikeUpsertWithWhereUniqueWithoutAccountInput[]
-    createMany?: PostLikeCreateManyAccountInputEnvelope
-    set?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    disconnect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    delete?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    update?: PostLikeUpdateWithWhereUniqueWithoutAccountInput | PostLikeUpdateWithWhereUniqueWithoutAccountInput[]
-    updateMany?: PostLikeUpdateManyWithWhereWithoutAccountInput | PostLikeUpdateManyWithWhereWithoutAccountInput[]
-    deleteMany?: PostLikeScalarWhereInput | PostLikeScalarWhereInput[]
-  }
-
   export type AccountCreateNestedOneWithoutPostsInput = {
     create?: XOR<AccountCreateWithoutPostsInput, AccountUncheckedCreateWithoutPostsInput>
     connectOrCreate?: AccountCreateOrConnectWithoutPostsInput
     connect?: AccountWhereUniqueInput
-  }
-
-  export type PostCreateNestedOneWithoutRepostsInput = {
-    create?: XOR<PostCreateWithoutRepostsInput, PostUncheckedCreateWithoutRepostsInput>
-    connectOrCreate?: PostCreateOrConnectWithoutRepostsInput
-    connect?: PostWhereUniqueInput
-  }
-
-  export type PostCreateNestedManyWithoutRepostInput = {
-    create?: XOR<PostCreateWithoutRepostInput, PostUncheckedCreateWithoutRepostInput> | PostCreateWithoutRepostInput[] | PostUncheckedCreateWithoutRepostInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutRepostInput | PostCreateOrConnectWithoutRepostInput[]
-    createMany?: PostCreateManyRepostInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type PostLikeCreateNestedManyWithoutPostInput = {
-    create?: XOR<PostLikeCreateWithoutPostInput, PostLikeUncheckedCreateWithoutPostInput> | PostLikeCreateWithoutPostInput[] | PostLikeUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutPostInput | PostLikeCreateOrConnectWithoutPostInput[]
-    createMany?: PostLikeCreateManyPostInputEnvelope
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-  }
-
-  export type PostUncheckedCreateNestedManyWithoutRepostInput = {
-    create?: XOR<PostCreateWithoutRepostInput, PostUncheckedCreateWithoutRepostInput> | PostCreateWithoutRepostInput[] | PostUncheckedCreateWithoutRepostInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutRepostInput | PostCreateOrConnectWithoutRepostInput[]
-    createMany?: PostCreateManyRepostInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type PostLikeUncheckedCreateNestedManyWithoutPostInput = {
-    create?: XOR<PostLikeCreateWithoutPostInput, PostLikeUncheckedCreateWithoutPostInput> | PostLikeCreateWithoutPostInput[] | PostLikeUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutPostInput | PostLikeCreateOrConnectWithoutPostInput[]
-    createMany?: PostLikeCreateManyPostInputEnvelope
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
   }
 
   export type AccountUpdateOneRequiredWithoutPostsNestedInput = {
@@ -6284,100 +4914,6 @@ export namespace Prisma {
     upsert?: AccountUpsertWithoutPostsInput
     connect?: AccountWhereUniqueInput
     update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutPostsInput, AccountUpdateWithoutPostsInput>, AccountUncheckedUpdateWithoutPostsInput>
-  }
-
-  export type PostUpdateOneWithoutRepostsNestedInput = {
-    create?: XOR<PostCreateWithoutRepostsInput, PostUncheckedCreateWithoutRepostsInput>
-    connectOrCreate?: PostCreateOrConnectWithoutRepostsInput
-    upsert?: PostUpsertWithoutRepostsInput
-    disconnect?: PostWhereInput | boolean
-    delete?: PostWhereInput | boolean
-    connect?: PostWhereUniqueInput
-    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutRepostsInput, PostUpdateWithoutRepostsInput>, PostUncheckedUpdateWithoutRepostsInput>
-  }
-
-  export type PostUpdateManyWithoutRepostNestedInput = {
-    create?: XOR<PostCreateWithoutRepostInput, PostUncheckedCreateWithoutRepostInput> | PostCreateWithoutRepostInput[] | PostUncheckedCreateWithoutRepostInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutRepostInput | PostCreateOrConnectWithoutRepostInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutRepostInput | PostUpsertWithWhereUniqueWithoutRepostInput[]
-    createMany?: PostCreateManyRepostInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutRepostInput | PostUpdateWithWhereUniqueWithoutRepostInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutRepostInput | PostUpdateManyWithWhereWithoutRepostInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type PostLikeUpdateManyWithoutPostNestedInput = {
-    create?: XOR<PostLikeCreateWithoutPostInput, PostLikeUncheckedCreateWithoutPostInput> | PostLikeCreateWithoutPostInput[] | PostLikeUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutPostInput | PostLikeCreateOrConnectWithoutPostInput[]
-    upsert?: PostLikeUpsertWithWhereUniqueWithoutPostInput | PostLikeUpsertWithWhereUniqueWithoutPostInput[]
-    createMany?: PostLikeCreateManyPostInputEnvelope
-    set?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    disconnect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    delete?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    update?: PostLikeUpdateWithWhereUniqueWithoutPostInput | PostLikeUpdateWithWhereUniqueWithoutPostInput[]
-    updateMany?: PostLikeUpdateManyWithWhereWithoutPostInput | PostLikeUpdateManyWithWhereWithoutPostInput[]
-    deleteMany?: PostLikeScalarWhereInput | PostLikeScalarWhereInput[]
-  }
-
-  export type PostUncheckedUpdateManyWithoutRepostNestedInput = {
-    create?: XOR<PostCreateWithoutRepostInput, PostUncheckedCreateWithoutRepostInput> | PostCreateWithoutRepostInput[] | PostUncheckedCreateWithoutRepostInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutRepostInput | PostCreateOrConnectWithoutRepostInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutRepostInput | PostUpsertWithWhereUniqueWithoutRepostInput[]
-    createMany?: PostCreateManyRepostInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutRepostInput | PostUpdateWithWhereUniqueWithoutRepostInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutRepostInput | PostUpdateManyWithWhereWithoutRepostInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type PostLikeUncheckedUpdateManyWithoutPostNestedInput = {
-    create?: XOR<PostLikeCreateWithoutPostInput, PostLikeUncheckedCreateWithoutPostInput> | PostLikeCreateWithoutPostInput[] | PostLikeUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: PostLikeCreateOrConnectWithoutPostInput | PostLikeCreateOrConnectWithoutPostInput[]
-    upsert?: PostLikeUpsertWithWhereUniqueWithoutPostInput | PostLikeUpsertWithWhereUniqueWithoutPostInput[]
-    createMany?: PostLikeCreateManyPostInputEnvelope
-    set?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    disconnect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    delete?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    connect?: PostLikeWhereUniqueInput | PostLikeWhereUniqueInput[]
-    update?: PostLikeUpdateWithWhereUniqueWithoutPostInput | PostLikeUpdateWithWhereUniqueWithoutPostInput[]
-    updateMany?: PostLikeUpdateManyWithWhereWithoutPostInput | PostLikeUpdateManyWithWhereWithoutPostInput[]
-    deleteMany?: PostLikeScalarWhereInput | PostLikeScalarWhereInput[]
-  }
-
-  export type AccountCreateNestedOneWithoutLikesInput = {
-    create?: XOR<AccountCreateWithoutLikesInput, AccountUncheckedCreateWithoutLikesInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutLikesInput
-    connect?: AccountWhereUniqueInput
-  }
-
-  export type PostCreateNestedOneWithoutLikesInput = {
-    create?: XOR<PostCreateWithoutLikesInput, PostUncheckedCreateWithoutLikesInput>
-    connectOrCreate?: PostCreateOrConnectWithoutLikesInput
-    connect?: PostWhereUniqueInput
-  }
-
-  export type AccountUpdateOneRequiredWithoutLikesNestedInput = {
-    create?: XOR<AccountCreateWithoutLikesInput, AccountUncheckedCreateWithoutLikesInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutLikesInput
-    upsert?: AccountUpsertWithoutLikesInput
-    connect?: AccountWhereUniqueInput
-    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutLikesInput, AccountUpdateWithoutLikesInput>, AccountUncheckedUpdateWithoutLikesInput>
-  }
-
-  export type PostUpdateOneRequiredWithoutLikesNestedInput = {
-    create?: XOR<PostCreateWithoutLikesInput, PostUncheckedCreateWithoutLikesInput>
-    connectOrCreate?: PostCreateOrConnectWithoutLikesInput
-    upsert?: PostUpsertWithoutLikesInput
-    connect?: PostWhereUniqueInput
-    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutLikesInput, PostUpdateWithoutLikesInput>, PostUncheckedUpdateWithoutLikesInput>
   }
 
   export type AccountCreateNestedOneWithoutFollowedByInput = {
@@ -6619,18 +5155,16 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     id: string
-    repost?: PostCreateNestedOneWithoutRepostsInput
-    reposts?: PostCreateNestedManyWithoutRepostInput
-    Likes?: PostLikeCreateNestedManyWithoutPostInput
+    body: string
+    repostId?: string | null
   }
 
   export type PostUncheckedCreateWithoutAuthorInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
     id: string
+    body: string
     repostId?: string | null
-    reposts?: PostUncheckedCreateNestedManyWithoutRepostInput
-    Likes?: PostLikeUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutAuthorInput = {
@@ -6640,30 +5174,6 @@ export namespace Prisma {
 
   export type PostCreateManyAuthorInputEnvelope = {
     data: PostCreateManyAuthorInput | PostCreateManyAuthorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PostLikeCreateWithoutAccountInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    post: PostCreateNestedOneWithoutLikesInput
-  }
-
-  export type PostLikeUncheckedCreateWithoutAccountInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    postId: string
-  }
-
-  export type PostLikeCreateOrConnectWithoutAccountInput = {
-    where: PostLikeWhereUniqueInput
-    create: XOR<PostLikeCreateWithoutAccountInput, PostLikeUncheckedCreateWithoutAccountInput>
-  }
-
-  export type PostLikeCreateManyAccountInputEnvelope = {
-    data: PostLikeCreateManyAccountInput | PostLikeCreateManyAccountInput[]
     skipDuplicates?: boolean
   }
 
@@ -6734,34 +5244,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     id?: UuidFilter<"Post"> | string
     authorId?: UuidFilter<"Post"> | string
+    body?: StringFilter<"Post"> | string
     repostId?: UuidNullableFilter<"Post"> | string | null
-  }
-
-  export type PostLikeUpsertWithWhereUniqueWithoutAccountInput = {
-    where: PostLikeWhereUniqueInput
-    update: XOR<PostLikeUpdateWithoutAccountInput, PostLikeUncheckedUpdateWithoutAccountInput>
-    create: XOR<PostLikeCreateWithoutAccountInput, PostLikeUncheckedCreateWithoutAccountInput>
-  }
-
-  export type PostLikeUpdateWithWhereUniqueWithoutAccountInput = {
-    where: PostLikeWhereUniqueInput
-    data: XOR<PostLikeUpdateWithoutAccountInput, PostLikeUncheckedUpdateWithoutAccountInput>
-  }
-
-  export type PostLikeUpdateManyWithWhereWithoutAccountInput = {
-    where: PostLikeScalarWhereInput
-    data: XOR<PostLikeUpdateManyMutationInput, PostLikeUncheckedUpdateManyWithoutAccountInput>
-  }
-
-  export type PostLikeScalarWhereInput = {
-    AND?: PostLikeScalarWhereInput | PostLikeScalarWhereInput[]
-    OR?: PostLikeScalarWhereInput[]
-    NOT?: PostLikeScalarWhereInput | PostLikeScalarWhereInput[]
-    id?: StringFilter<"PostLike"> | string
-    createdAt?: DateTimeFilter<"PostLike"> | Date | string
-    updatedAt?: DateTimeFilter<"PostLike"> | Date | string
-    postId?: UuidFilter<"PostLike"> | string
-    accountId?: UuidFilter<"PostLike"> | string
   }
 
   export type AccountCreateWithoutPostsInput = {
@@ -6774,7 +5258,6 @@ export namespace Prisma {
     id: string
     followedBy?: AccountFollowCreateNestedManyWithoutFolloweeInput
     follows?: AccountFollowCreateNestedManyWithoutFollowerInput
-    likes?: PostLikeCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutPostsInput = {
@@ -6787,87 +5270,11 @@ export namespace Prisma {
     id: string
     followedBy?: AccountFollowUncheckedCreateNestedManyWithoutFolloweeInput
     follows?: AccountFollowUncheckedCreateNestedManyWithoutFollowerInput
-    likes?: PostLikeUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutPostsInput = {
     where: AccountWhereUniqueInput
     create: XOR<AccountCreateWithoutPostsInput, AccountUncheckedCreateWithoutPostsInput>
-  }
-
-  export type PostCreateWithoutRepostsInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    author: AccountCreateNestedOneWithoutPostsInput
-    repost?: PostCreateNestedOneWithoutRepostsInput
-    Likes?: PostLikeCreateNestedManyWithoutPostInput
-  }
-
-  export type PostUncheckedCreateWithoutRepostsInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    authorId: string
-    repostId?: string | null
-    Likes?: PostLikeUncheckedCreateNestedManyWithoutPostInput
-  }
-
-  export type PostCreateOrConnectWithoutRepostsInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutRepostsInput, PostUncheckedCreateWithoutRepostsInput>
-  }
-
-  export type PostCreateWithoutRepostInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    author: AccountCreateNestedOneWithoutPostsInput
-    reposts?: PostCreateNestedManyWithoutRepostInput
-    Likes?: PostLikeCreateNestedManyWithoutPostInput
-  }
-
-  export type PostUncheckedCreateWithoutRepostInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    authorId: string
-    reposts?: PostUncheckedCreateNestedManyWithoutRepostInput
-    Likes?: PostLikeUncheckedCreateNestedManyWithoutPostInput
-  }
-
-  export type PostCreateOrConnectWithoutRepostInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutRepostInput, PostUncheckedCreateWithoutRepostInput>
-  }
-
-  export type PostCreateManyRepostInputEnvelope = {
-    data: PostCreateManyRepostInput | PostCreateManyRepostInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PostLikeCreateWithoutPostInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    account: AccountCreateNestedOneWithoutLikesInput
-  }
-
-  export type PostLikeUncheckedCreateWithoutPostInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    accountId: string
-  }
-
-  export type PostLikeCreateOrConnectWithoutPostInput = {
-    where: PostLikeWhereUniqueInput
-    create: XOR<PostLikeCreateWithoutPostInput, PostLikeUncheckedCreateWithoutPostInput>
-  }
-
-  export type PostLikeCreateManyPostInputEnvelope = {
-    data: PostLikeCreateManyPostInput | PostLikeCreateManyPostInput[]
-    skipDuplicates?: boolean
   }
 
   export type AccountUpsertWithoutPostsInput = {
@@ -6891,7 +5298,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     followedBy?: AccountFollowUpdateManyWithoutFolloweeNestedInput
     follows?: AccountFollowUpdateManyWithoutFollowerNestedInput
-    likes?: PostLikeUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutPostsInput = {
@@ -6904,188 +5310,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     followedBy?: AccountFollowUncheckedUpdateManyWithoutFolloweeNestedInput
     follows?: AccountFollowUncheckedUpdateManyWithoutFollowerNestedInput
-    likes?: PostLikeUncheckedUpdateManyWithoutAccountNestedInput
-  }
-
-  export type PostUpsertWithoutRepostsInput = {
-    update: XOR<PostUpdateWithoutRepostsInput, PostUncheckedUpdateWithoutRepostsInput>
-    create: XOR<PostCreateWithoutRepostsInput, PostUncheckedCreateWithoutRepostsInput>
-    where?: PostWhereInput
-  }
-
-  export type PostUpdateToOneWithWhereWithoutRepostsInput = {
-    where?: PostWhereInput
-    data: XOR<PostUpdateWithoutRepostsInput, PostUncheckedUpdateWithoutRepostsInput>
-  }
-
-  export type PostUpdateWithoutRepostsInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    author?: AccountUpdateOneRequiredWithoutPostsNestedInput
-    repost?: PostUpdateOneWithoutRepostsNestedInput
-    Likes?: PostLikeUpdateManyWithoutPostNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutRepostsInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
-    repostId?: NullableStringFieldUpdateOperationsInput | string | null
-    Likes?: PostLikeUncheckedUpdateManyWithoutPostNestedInput
-  }
-
-  export type PostUpsertWithWhereUniqueWithoutRepostInput = {
-    where: PostWhereUniqueInput
-    update: XOR<PostUpdateWithoutRepostInput, PostUncheckedUpdateWithoutRepostInput>
-    create: XOR<PostCreateWithoutRepostInput, PostUncheckedCreateWithoutRepostInput>
-  }
-
-  export type PostUpdateWithWhereUniqueWithoutRepostInput = {
-    where: PostWhereUniqueInput
-    data: XOR<PostUpdateWithoutRepostInput, PostUncheckedUpdateWithoutRepostInput>
-  }
-
-  export type PostUpdateManyWithWhereWithoutRepostInput = {
-    where: PostScalarWhereInput
-    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutRepostInput>
-  }
-
-  export type PostLikeUpsertWithWhereUniqueWithoutPostInput = {
-    where: PostLikeWhereUniqueInput
-    update: XOR<PostLikeUpdateWithoutPostInput, PostLikeUncheckedUpdateWithoutPostInput>
-    create: XOR<PostLikeCreateWithoutPostInput, PostLikeUncheckedCreateWithoutPostInput>
-  }
-
-  export type PostLikeUpdateWithWhereUniqueWithoutPostInput = {
-    where: PostLikeWhereUniqueInput
-    data: XOR<PostLikeUpdateWithoutPostInput, PostLikeUncheckedUpdateWithoutPostInput>
-  }
-
-  export type PostLikeUpdateManyWithWhereWithoutPostInput = {
-    where: PostLikeScalarWhereInput
-    data: XOR<PostLikeUpdateManyMutationInput, PostLikeUncheckedUpdateManyWithoutPostInput>
-  }
-
-  export type AccountCreateWithoutLikesInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    email: string
-    username: string
-    profilePic?: string | null
-    bio?: string | null
-    id: string
-    followedBy?: AccountFollowCreateNestedManyWithoutFolloweeInput
-    follows?: AccountFollowCreateNestedManyWithoutFollowerInput
-    posts?: PostCreateNestedManyWithoutAuthorInput
-  }
-
-  export type AccountUncheckedCreateWithoutLikesInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    email: string
-    username: string
-    profilePic?: string | null
-    bio?: string | null
-    id: string
-    followedBy?: AccountFollowUncheckedCreateNestedManyWithoutFolloweeInput
-    follows?: AccountFollowUncheckedCreateNestedManyWithoutFollowerInput
-    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
-  }
-
-  export type AccountCreateOrConnectWithoutLikesInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutLikesInput, AccountUncheckedCreateWithoutLikesInput>
-  }
-
-  export type PostCreateWithoutLikesInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    author: AccountCreateNestedOneWithoutPostsInput
-    repost?: PostCreateNestedOneWithoutRepostsInput
-    reposts?: PostCreateNestedManyWithoutRepostInput
-  }
-
-  export type PostUncheckedCreateWithoutLikesInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    authorId: string
-    repostId?: string | null
-    reposts?: PostUncheckedCreateNestedManyWithoutRepostInput
-  }
-
-  export type PostCreateOrConnectWithoutLikesInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutLikesInput, PostUncheckedCreateWithoutLikesInput>
-  }
-
-  export type AccountUpsertWithoutLikesInput = {
-    update: XOR<AccountUpdateWithoutLikesInput, AccountUncheckedUpdateWithoutLikesInput>
-    create: XOR<AccountCreateWithoutLikesInput, AccountUncheckedCreateWithoutLikesInput>
-    where?: AccountWhereInput
-  }
-
-  export type AccountUpdateToOneWithWhereWithoutLikesInput = {
-    where?: AccountWhereInput
-    data: XOR<AccountUpdateWithoutLikesInput, AccountUncheckedUpdateWithoutLikesInput>
-  }
-
-  export type AccountUpdateWithoutLikesInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    email?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    profilePic?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    id?: StringFieldUpdateOperationsInput | string
-    followedBy?: AccountFollowUpdateManyWithoutFolloweeNestedInput
-    follows?: AccountFollowUpdateManyWithoutFollowerNestedInput
-    posts?: PostUpdateManyWithoutAuthorNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutLikesInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    email?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    profilePic?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    id?: StringFieldUpdateOperationsInput | string
-    followedBy?: AccountFollowUncheckedUpdateManyWithoutFolloweeNestedInput
-    follows?: AccountFollowUncheckedUpdateManyWithoutFollowerNestedInput
-    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-  }
-
-  export type PostUpsertWithoutLikesInput = {
-    update: XOR<PostUpdateWithoutLikesInput, PostUncheckedUpdateWithoutLikesInput>
-    create: XOR<PostCreateWithoutLikesInput, PostUncheckedCreateWithoutLikesInput>
-    where?: PostWhereInput
-  }
-
-  export type PostUpdateToOneWithWhereWithoutLikesInput = {
-    where?: PostWhereInput
-    data: XOR<PostUpdateWithoutLikesInput, PostUncheckedUpdateWithoutLikesInput>
-  }
-
-  export type PostUpdateWithoutLikesInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    author?: AccountUpdateOneRequiredWithoutPostsNestedInput
-    repost?: PostUpdateOneWithoutRepostsNestedInput
-    reposts?: PostUpdateManyWithoutRepostNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutLikesInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
-    repostId?: NullableStringFieldUpdateOperationsInput | string | null
-    reposts?: PostUncheckedUpdateManyWithoutRepostNestedInput
   }
 
   export type AccountCreateWithoutFollowedByInput = {
@@ -7098,7 +5322,6 @@ export namespace Prisma {
     id: string
     follows?: AccountFollowCreateNestedManyWithoutFollowerInput
     posts?: PostCreateNestedManyWithoutAuthorInput
-    likes?: PostLikeCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutFollowedByInput = {
@@ -7111,7 +5334,6 @@ export namespace Prisma {
     id: string
     follows?: AccountFollowUncheckedCreateNestedManyWithoutFollowerInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    likes?: PostLikeUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutFollowedByInput = {
@@ -7129,7 +5351,6 @@ export namespace Prisma {
     id: string
     followedBy?: AccountFollowCreateNestedManyWithoutFolloweeInput
     posts?: PostCreateNestedManyWithoutAuthorInput
-    likes?: PostLikeCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutFollowsInput = {
@@ -7142,7 +5363,6 @@ export namespace Prisma {
     id: string
     followedBy?: AccountFollowUncheckedCreateNestedManyWithoutFolloweeInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    likes?: PostLikeUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutFollowsInput = {
@@ -7171,7 +5391,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     follows?: AccountFollowUpdateManyWithoutFollowerNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
-    likes?: PostLikeUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutFollowedByInput = {
@@ -7184,7 +5403,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     follows?: AccountFollowUncheckedUpdateManyWithoutFollowerNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    likes?: PostLikeUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountUpsertWithoutFollowsInput = {
@@ -7208,7 +5426,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     followedBy?: AccountFollowUpdateManyWithoutFolloweeNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
-    likes?: PostLikeUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutFollowsInput = {
@@ -7221,7 +5438,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     followedBy?: AccountFollowUncheckedUpdateManyWithoutFolloweeNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    likes?: PostLikeUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountFollowCreateManyFolloweeInput = {
@@ -7242,14 +5458,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     id: string
+    body: string
     repostId?: string | null
-  }
-
-  export type PostLikeCreateManyAccountInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    postId: string
   }
 
   export type AccountFollowUpdateWithoutFolloweeInput = {
@@ -7298,106 +5508,24 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
-    repost?: PostUpdateOneWithoutRepostsNestedInput
-    reposts?: PostUpdateManyWithoutRepostNestedInput
-    Likes?: PostLikeUpdateManyWithoutPostNestedInput
+    body?: StringFieldUpdateOperationsInput | string
+    repostId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PostUncheckedUpdateWithoutAuthorInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     repostId?: NullableStringFieldUpdateOperationsInput | string | null
-    reposts?: PostUncheckedUpdateManyWithoutRepostNestedInput
-    Likes?: PostLikeUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutAuthorInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     repostId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PostLikeUpdateWithoutAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    post?: PostUpdateOneRequiredWithoutLikesNestedInput
-  }
-
-  export type PostLikeUncheckedUpdateWithoutAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    postId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PostLikeUncheckedUpdateManyWithoutAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    postId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PostCreateManyRepostInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    id: string
-    authorId: string
-  }
-
-  export type PostLikeCreateManyPostInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    accountId: string
-  }
-
-  export type PostUpdateWithoutRepostInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    author?: AccountUpdateOneRequiredWithoutPostsNestedInput
-    reposts?: PostUpdateManyWithoutRepostNestedInput
-    Likes?: PostLikeUpdateManyWithoutPostNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutRepostInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
-    reposts?: PostUncheckedUpdateManyWithoutRepostNestedInput
-    Likes?: PostLikeUncheckedUpdateManyWithoutPostNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutRepostInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    id?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PostLikeUpdateWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    account?: AccountUpdateOneRequiredWithoutLikesNestedInput
-  }
-
-  export type PostLikeUncheckedUpdateWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    accountId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PostLikeUncheckedUpdateManyWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    accountId?: StringFieldUpdateOperationsInput | string
   }
 
 
@@ -7410,10 +5538,6 @@ export namespace Prisma {
      */
     export type AccountCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AccountCountOutputTypeDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use PostCountOutputTypeDefaultArgs instead
-     */
-    export type PostCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PostCountOutputTypeDefaultArgs<ExtArgs>
-    /**
      * @deprecated Use AccountDefaultArgs instead
      */
     export type AccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AccountDefaultArgs<ExtArgs>
@@ -7421,10 +5545,6 @@ export namespace Prisma {
      * @deprecated Use PostDefaultArgs instead
      */
     export type PostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PostDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use PostLikeDefaultArgs instead
-     */
-    export type PostLikeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PostLikeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AccountFollowDefaultArgs instead
      */

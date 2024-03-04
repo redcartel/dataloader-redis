@@ -5,14 +5,18 @@
   "scripts": {
     "server-build": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
     "server-dev": "ts-node-dev ./src/index.ts --transpileOnly",
-    "server-run": "node ./dist/index.js"
+    "server-run": "node ./dist/index.js",
+    "server-test": "jest --color --detectOpenHandles"
   },
   "devDependencies": {
     "@types/cors": "^2",
     "@types/express": "^4",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.11.16",
     "@types/pg": "^8.11.0",
     "esbuild": "^0.20.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
@@ -29,6 +33,7 @@
     "graphql-yoga": "^5.1.1",
     "helmet": "^7.1.0",
     "pg": "^8.11.3",
+    "prisma": "^5.10.2",
     "redis": "^4.6.13",
     "uuidv7": "^0.6.3"
   }

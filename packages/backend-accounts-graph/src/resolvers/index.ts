@@ -8,10 +8,10 @@ export const resolvers = {
   },
   Query: {
     account: async (_root, { id }, context: AccountsContext) => {
-      return await context.loaders.accountById?.load(id);
+      return await context.loaders.accountById.load(id);
     },
     me: async (_root, _args, context: AccountsContext) => {
-      return context.account;
+      return context.account ?? null;
     },
   },
 };

@@ -1,67 +1,46 @@
 import { RedisClientType } from "redis";
-import PostRepository, { LikeType, LikesCursorType, PostType, PostsCursorType } from "../data-access";
+import { postRepositoryFactory } from "../data-access";
 import DataLoaderRedis from "dataloader-redis";
 import { Pool } from "pg";
 import { config } from "common-values";
+import { PrismaClient } from "data-resources/src/prisma-connection";
 
-export default class PostsLoaders {
-  private redis: RedisClientType;
-  private postgres: Pool;
+export interface PostsCursorResponse {
+  posts: any[];
+  cursorTimestamp?: string;
+  cursorId?: string;
+}
 
-  public limit : number = 20;
-
-  private repo: PostRepository;
-
-  public postsById: DataLoaderRedis<string, PostType>;
-  public likeCountByPostsId: DataLoaderRedis<string, number>;
-  public likesByPostAndCursor: DataLoaderRedis<[string, Date], LikesCursorType>;
-  public postsByCursor: DataLoaderRedis<Date, PostsCursorType>;
-  public postsByAccountAndCursor: DataLoaderRedis<[string, Date], PostsCursorType>; 
-
-  constructor(redisConnection: RedisClientType, postgresConnectioon: Pool, limit?: number) {
-    this.redis = redisConnection;
-    this.postgres = postgresConnectioon;
-    this.repo = new PostRepository(this.postgres);
-    this.limit = limit ?? this.limit;
-
-    this.postsById = new DataLoaderRedis<string, PostType>(
-      this.redis,
-      async (ids: string[]) => this.repo.postByIdsAggregate(ids),
+export function postLoaderFactory(
+  redis: RedisClientType,
+  repo: ReturnType<typeof postRepositoryFactory>,
+) {
+  return {
+    postsById: new DataLoaderRedis(
+      redis,
+      async (ids: string[]) => repo.postByIdsAggregate(ids),
       {
-        ttl: config.backend.dataloaderTtl
+        ttl: config.backend.dataloaderTtl,
+        missingValue: (key) => undefined,
       },
-    );
+    ),
 
-    (this.likesByPostAndCursor = new DataLoaderRedis<[string, Date], LikesCursorType>(
-      this.redis,
-      async (postCursors) => this.repo.likesByPostsAndCursorsAggregate(postCursors),
-    )),
+    postsByCursor: new DataLoaderRedis(
+      redis,
+      async (cursors: [Date, string][]) =>
+        await repo.postsByCursorAggregate(cursors),
       {
-        ttl: 2
-      };
-
-    this.likeCountByPostsId = new DataLoaderRedis<string, number>(
-      this.redis,
-      async (ids: string[]) => this.repo.likesCountByPostAggregate(ids),
-      {
-        ttl: config.backend.dataloaderTtl
+        ttl: 2,
       },
-    );
+    ),
 
-    this.postsByCursor = new DataLoaderRedis<Date, PostsCursorType>(
-      this.redis,
-      async (cursors: Date[]) => this.repo.postsByCursorAggregate(cursors, this.limit),
+    postsByAccountAndCursor: new DataLoaderRedis(
+      redis,
+      async (accountCursors: [string, Date, string][]) =>
+        await repo.postsByAccountsAndCursorsAggregate(accountCursors),
       {
-        ttl: 2
-      }
-    )
-
-    this.postsByAccountAndCursor = new DataLoaderRedis<[string, Date], PostsCursorType>(
-      this.redis,
-      async(accountCursors) => this.repo.postsByAccountsAndCursorsAggregate(accountCursors, this.limit),
-      {
-        ttl: 2
-      }
-    )
-  }
+        ttl: 2,
+      },
+    ),
+  };
 }

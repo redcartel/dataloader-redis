@@ -9,8 +9,9 @@ import { makeRedisConnection } from "data-resources/src/redis-connection";
 import { GraphQLResolverMap } from "@apollo/subgraph/dist/schema-helper";
 import express from "express";
 import cookieParser from "cookie-parser";
+import { PrismaClient } from "data-resources/src/prisma-connection";
 
-const pgConnection = makePostgresConnection();
+const client = new PrismaClient();
 const redisConnection = makeRedisConnection();
 
 const accountsYoga = createYoga({
@@ -19,7 +20,7 @@ const accountsYoga = createYoga({
     resolvers: resolvers as GraphQLResolverMap<any>,
   }),
   plugins: accountsPlugins,
-  context: contextFactory(redisConnection, pgConnection),
+  context: contextFactory(redisConnection, client),
 });
 
 const app = express();

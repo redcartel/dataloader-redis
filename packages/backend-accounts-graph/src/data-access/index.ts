@@ -1,4 +1,9 @@
+import { config } from "common-values";
+import { Prisma } from "data-resources/src/generated/prismaClient";
 import { PrismaClient } from "data-resources/src/prisma-connection";
+
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 const defaultSelect = {
   id: true,
@@ -7,28 +12,28 @@ const defaultSelect = {
   bio: true,
   profilePic: true,
   createdAt: true,
-  updatedAt: true
-}
+  updatedAt: true,
+};
 
-export class AccountRepository {
-  private connection: PrismaClient;
+export function accountRepositoryFactory(
+  connection: PrismaClient,
+  limit?: number,
+) {
+  limit ??= config.backend.pageLimit;
 
-  constructor(prisma: PrismaClient) {
-    this.connection = prisma;
-  }
-
-  async accounts() {
-    return await this.connection.account.findMany();
-  }
-
-  async accountById(id: string) {
-    return await this.connection.account.findUnique({ select: defaultSelect, where: { id } });
-  }
-
-  async accountAggregate(ids: string[]) {
-    const result = await this.connection.account.findMany({ select: defaultSelect, where: { id : {
-      in: ids
-    }}})
-    return result;
-  }
+  return {
+    async accountAggregate(ids: string[]) {
+      const result = await connection.account.findMany({
+        select: defaultSelect,
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
+      const idMap: { [key: string]: ArrayElement<typeof result> } = {};
+      result.forEach((row) => (idMap[row.id] = row));
+      return ids.map((id) => idMap[id]);
+    },
+  };
 }

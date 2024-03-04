@@ -25,11 +25,18 @@ export function genPrismaMock() {
       ],
       post: [
         {
-          id: "10000000-0000-0000-0000-000000000001",
+          id: "10000000-0000-0000-0000-000000000000",
           accountId: "00000000-0000-0000-0000-000000000000",
           body: "first post!",
           createdAt: new Date(0),
           updatedAt: new Date(0),
+        },
+        {
+          id: "10000000-0000-0000-0000-000000000001",
+          accountId: "00000000-0000-0000-0000-000000000000",
+          body: "second post!",
+          createdAt: new Date(100),
+          updatedAt: new Date(100),
         },
       ],
     },

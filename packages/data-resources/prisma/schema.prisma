@@ -1,6 +1,8 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prismaClient"
+  previewFeatures = ["relationJoins"]
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -19,7 +21,6 @@ model Account {
   followedBy AccountFollow[] @relation("followee_relation")
   follows    AccountFollow[] @relation("follower_relation")
   posts      Post[]
-  likes      PostLike[]
 }
 
 model Post {
@@ -27,25 +28,11 @@ model Post {
   updatedAt DateTime   @updatedAt
   id        String     @id @db.Uuid
   authorId  String     @db.Uuid
+  body      String
   repostId  String?    @db.Uuid
   author    Account    @relation(fields: [authorId], references: [id])
-  repost    Post?      @relation("repost_reference", fields: [repostId], references: [id])
-  reposts   Post[]     @relation("repost_reference")
-  Likes     PostLike[]
 
   @@unique([authorId, createdAt])
-}
-
-model PostLike {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  postId    String   @db.Uuid
-  accountId String   @db.Uuid
-  account   Account  @relation(fields: [accountId], references: [id])
-  post      Post     @relation(fields: [postId], references: [id])
-
-  @@unique([postId, accountId])
 }
 
 model AccountFollow {

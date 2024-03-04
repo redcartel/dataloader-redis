@@ -6,6 +6,7 @@
     "server-build": "esbuild ./src/index.ts --bundle --platform=node --outfile=./dist/index.js",
     "server-dev": "ts-node-dev ./src/index.ts --transpileOnly",
     "server-run": "node ./dist/index.js",
+    "server-test": "jest --color",
     "test": "ts-jest"
   },
   "devDependencies": {

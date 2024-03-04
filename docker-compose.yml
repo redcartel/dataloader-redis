@@ -3,15 +3,17 @@ version: "3"
 services:
   db:
     image: "postgres:15"
-    environment:
-      - POSTGRES_PASSWORD=password
+    env_file: .env.docker
     ports:
       - 5432:5432
     restart: unless-stopped
-    volumes:
-      - ./packages/data-resources/pgdata:/var/lib/postgresql/data
+  
+  authdb:
+    image: "postgres:15"
+    env_file: .env.supertokens
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
+      test: ["CMD", "pg_isready", "-U", "supertokens"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -19,7 +21,7 @@ services:
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql
     depends_on:
-      - db
+      - authdb
     ports:
       - 3567:3567
     restart: unless-stopped
@@ -31,13 +33,13 @@ services:
       retries: 5
     env_file: .env.supertokens
 
-  gatway:
+  gateway:
     build:
       context: .
       dockerfile: Dockerfile.graphDev
     volumes:
       - ./packages:/app/packages
-    entrypoint: yarn workspace backend-gateway server-dev
+    entrypoint: sh migrate_launch_dev.sh
     depends_on:
       - db
       - redis
@@ -46,7 +48,6 @@ services:
       - backend-posts-graph
     ports:
       - 4000:4000
-
     env_file: .env.docker
 
   backend-accounts-graph:
@@ -62,7 +63,6 @@ services:
       - supertokens
     ports:
       - 4001:4001
-
     env_file: .env.docker
 
   backend-posts-graph:
@@ -78,9 +78,10 @@ services:
       - supertokens
     ports:
       - 4002:4002
-
     env_file: .env.docker
 
   redis:
     image: redis
     restart: unless-stopped
+    ports:
+      - 6379:6379

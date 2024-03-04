@@ -1,15 +1,13 @@
-import { createServer } from "http";
 import { createYoga } from "graphql-yoga";
 import { buildSubgraphSchema } from "@apollo/subgraph";
 import { postsSchema } from "./schema.graphql";
 import { resolvers } from "./resolvers";
-import { makePostgresConnection } from "data-resources/src/postgres-connection";
 import { makeRedisConnection } from "data-resources/src/redis-connection";
-import PostsLoaders from "./data-aggregation";
-import { PostsContext, contextFactory } from "./context";
+import { contextFactory } from "./context";
 import { GraphQLResolverMap } from "@apollo/subgraph/dist/schema-helper";
+import { PrismaClient } from "data-resources/src/prisma-connection";
 
-const pgConnection = makePostgresConnection();
+const client = new PrismaClient();
 const redisConnection = makeRedisConnection();
 
 export const postsGraph = createYoga({
@@ -18,5 +16,5 @@ export const postsGraph = createYoga({
       resolvers: resolvers as GraphQLResolverMap<any>,
     }),
     plugins: [],
-    context: contextFactory(redisConnection, pgConnection),
+    context: contextFactory(redisConnection, client),
   });

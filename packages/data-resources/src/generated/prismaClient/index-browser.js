@@ -117,20 +117,18 @@ exports.Prisma.AccountScalarFieldEnum = {
   id: 'id'
 };
 
+exports.Prisma.RelationLoadStrategy = {
+  query: 'query',
+  join: 'join'
+};
+
 exports.Prisma.PostScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   id: 'id',
   authorId: 'authorId',
+  body: 'body',
   repostId: 'repostId'
-};
-
-exports.Prisma.PostLikeScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  postId: 'postId',
-  accountId: 'accountId'
 };
 
 exports.Prisma.AccountFollowScalarFieldEnum = {
@@ -160,7 +158,6 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Account: 'Account',
   Post: 'Post',
-  PostLike: 'PostLike',
   AccountFollow: 'AccountFollow'
 };
 

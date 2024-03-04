@@ -7,29 +7,32 @@ import { LRUCache } from "lru-cache";
 
 type _RedisClient = ReturnType<typeof createClient<any, any, any>>;
 
-type DataLoaderRedisOptions<K, V> = {
+type DataLoaderRedisOptions<K, V, M> = {
   prefix?: string;
   ttl?: number;
   dataLoaderOptions?: Options<K, V>;
   serializeKey?: (key: K) => string;
-  serializeValue?: (value: V) => string;
+  serializeValue?: (value: V | M) => string;
   deserializeValue?: (serialized: string) => OrError<V>;
+  missingValue?: (key: K) => M;
 };
 
-class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
+class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K, V | M> {
   public client: RedisClientType;
 
   private _prefix: string;
+
+  private missingValue: (key: K) => M;
 
   public serializeKey = (key: K): string => {
     return stringify(key);
   };
 
-  public serializeValue = (value: V): string => {
+  public serializeValue = (value: V | M): string => {
     return stringify(value);
   };
 
-  public deserializeValue = (serialized: string): OrError<V> => {
+  public deserializeValue = (serialized: string): OrError<V | M> => {
     return JSON.parse(serialized);
   };
 
@@ -41,9 +44,9 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
   }
 
   constructor(
-    client: _RedisClient,
+    client: _RedisClient | (() => _RedisClient),
     batchLoad: (keys: K[]) => Promise<OrError<V>[]>,
-    dataloaderRedisOptions?: DataLoaderRedisOptions<K, V>,
+    dataloaderRedisOptions?: DataLoaderRedisOptions<K, V, M>,
   ) {
     const {
       ttl,
@@ -51,6 +54,7 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
       serializeKey,
       serializeValue,
       deserializeValue,
+      missingValue,
     } = dataloaderRedisOptions ?? {};
 
     const _ttl = ttl ?? 60;
@@ -59,7 +63,7 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
       [
         {
           reader: async (keys: K[]) => {
-            if (!client?.isReady) {
+            if (!this.client?.isReady) {
               console.warn("redis read fail, client not ready");
               return keys.map((_key) => new Error("Redis not connected"));
             }
@@ -73,8 +77,8 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
 
             return vals;
           },
-          writer: async (keys: K[], vals: V[]) => {
-            if (!client?.isReady) {
+          writer: async (keys: K[], vals: (V | M)[]) => {
+            if (!this.client?.isReady) {
               console.warn("redis write fail, client not ready");
               return;
             }
@@ -87,7 +91,7 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
             await multi.exec();
           },
           clear: async (key) => {
-            if (!client?.isReady) {
+            if (!this.client?.isReady) {
               console.warn("redis del fail, client not ready");
               return;
             }
@@ -105,7 +109,7 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
         cache: true,
         cacheMap:
           options?.cacheMap ||
-          new LRUCache<K, Promise<V>>({
+          new LRUCache<K, Promise<V | M>>({
             ttl: 500,
             max: 1024,
             ttlAutopurge: true,
@@ -116,9 +120,14 @@ class DataLoaderRedis<K extends {}, V extends {}> extends LayeredLoader<K, V> {
     this.serializeKey = serializeKey ?? this.serializeKey;
     this.serializeValue = serializeValue ?? this.serializeValue;
     this.deserializeValue = deserializeValue ?? this.deserializeValue;
+    this.missingValue = missingValue ?? (key => { throw new Error('Not Found')});
     this._prefix =
       dataloaderRedisOptions?.prefix ?? v3(batchLoad.toString()).toString(36);
-    this.client = client as RedisClientType;
+    this.client = (client as any).call ? (client as any)() : client;
+  }
+
+  override load(key: K) {
+    return super.load(key).catch(e => this.missingValue(e));
   }
 }
 

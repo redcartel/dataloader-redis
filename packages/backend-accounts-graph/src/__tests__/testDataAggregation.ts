@@ -1,11 +1,12 @@
 import { createClient } from 'dataloader-redis/src/nondist/redis-mock';
 import { genPrismaMock } from 'data-resources/src/tests/prismaMock';
-import AccountsLoaders from '../data-aggregation';
+import { accountLoaderFactory } from '../data-aggregation';
+import { accountRepositoryFactory } from '../data-access';
 
-let loaders : AccountsLoaders;
+let loaders : ReturnType<typeof accountLoaderFactory>;
 
 beforeEach(() => {
-    loaders = new AccountsLoaders(createClient() as any, genPrismaMock() as any);
+    loaders = accountLoaderFactory(createClient() as any, accountRepositoryFactory(genPrismaMock() as any));
 });
 
 test("loads data from dataloader", async () => {
