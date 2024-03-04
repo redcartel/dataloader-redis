@@ -1,15 +1,16 @@
 import { createClient } from "dataloader-redis/src/nondist/redis-mock";
-import { genPrismaMock } from "data-resources/src/tests/prismaMock";
+import { genPrismaMock } from "data-resources/src/testResources/prismaMock";
 import { postLoaderFactory } from "../data-aggregation";
 import { PrismaClient } from "data-resources/src/prisma-connection";
 import { makeRedisConnection } from "data-resources/src/redis-connection";
 import { postRepositoryFactory } from "../data-access";
 import { RedisClientType } from "redis";
+import { config } from "common-values";
 
 let loaders: ReturnType<typeof postLoaderFactory>;
 let realLoaders: ReturnType<typeof postLoaderFactory>; 
 
-const testLive = !!process.env["LIVE_TEST"];
+const testLive = config.test.liveTest;
 
 let connection : RedisClientType | undefined = undefined;
 

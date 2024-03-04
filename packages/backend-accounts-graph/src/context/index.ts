@@ -9,7 +9,7 @@ export function contextFactory(
   redisConnection: RedisClientType,
   client: PrismaClient,
 ) {
-  const loaders = accountLoaderFactory(redisConnection, accountRepositoryFactory(client));
+  const loaders = accountLoaderFactory(redisConnection, accountRepositoryFactory(client, config.backend.pageLimit));
   return (context: any) => {
     return {
       ...context,

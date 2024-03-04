@@ -4,6 +4,7 @@ export const accountsSchema = gql`
   type Account @key(fields: "id") {
     id: ID!
     email: String!
+    bio: String
     username: String!
     createdAt: String!
     updatedAt: String!

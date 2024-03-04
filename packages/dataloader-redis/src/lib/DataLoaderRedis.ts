@@ -1,8 +1,8 @@
 import { LayeredLoader, OrError, OrNull } from "./LayeredLoader";
 import stringify from "json-stable-stringify";
-import { BatchLoadFn, Options } from "dataloader";
+import { Options } from "dataloader";
 import { v3 } from "murmurhash";
-import { RedisClientType, createClient } from "redis";
+import { createClient } from "redis";
 import { LRUCache } from "lru-cache";
 
 type _RedisClient = ReturnType<typeof createClient<any, any, any>>;
@@ -18,9 +18,9 @@ type DataLoaderRedisOptions<K, V, M> = {
 };
 
 class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K, V | M> {
-  public client: RedisClientType;
+  public client: _RedisClient;
 
-  private _prefix: string;
+  public prefix: string;
 
   private missingValue: (key: K) => M;
 
@@ -37,14 +37,11 @@ class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K
   };
 
   public makeKey(key: K) {
-    const _key = `${this._prefix}:${this.serializeKey(key)}`;
-    return _key.length < 64
-      ? _key
-      : `${this._prefix}:${v3(this.serializeKey(key)).toString(36)}`;
+    return `${this.prefix}:${this.serializeKey(key)}`;
   }
 
   constructor(
-    client: _RedisClient | (() => _RedisClient),
+    client: _RedisClient,
     batchLoad: (keys: K[]) => Promise<OrError<V>[]>,
     dataloaderRedisOptions?: DataLoaderRedisOptions<K, V, M>,
   ) {
@@ -121,13 +118,23 @@ class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K
     this.serializeValue = serializeValue ?? this.serializeValue;
     this.deserializeValue = deserializeValue ?? this.deserializeValue;
     this.missingValue = missingValue ?? (key => { throw new Error('Not Found')});
-    this._prefix =
+    this.prefix =
       dataloaderRedisOptions?.prefix ?? v3(batchLoad.toString()).toString(36);
-    this.client = (client as any).call ? (client as any)() : client;
+    this.client = client;
   }
 
   override load(key: K) {
     return super.load(key).catch(e => this.missingValue(e));
+  }
+
+  public async scanAndDelete(pattern: string): Promise<void> {
+    let cursor = 0;
+    do {
+      const reply = await this.client.scan(cursor, { MATCH: this.prefix + ':' + pattern, COUNT: 1000 });
+      cursor = reply.cursor;
+      
+      await this.client.del(reply.keys);
+    } while (cursor !== 0)
   }
 }
 

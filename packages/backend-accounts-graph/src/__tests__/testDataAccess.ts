@@ -1,4 +1,4 @@
-import { genPrismaMock } from 'data-resources/src/tests/prismaMock';
+import { genPrismaMock } from 'data-resources/src/testResources/prismaMock';
 import { accountRepositoryFactory } from '../data-access';
 
 let accountRepo : ReturnType<typeof accountRepositoryFactory>;

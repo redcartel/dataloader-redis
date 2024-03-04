@@ -48,4 +48,7 @@ export const config = {
   frontend: {
     url: process.env["FRONTEND_URL"],
   },
+  test: {
+    liveTest: process.env["LIVE_TEST"]?.match(/1|true/i)
+  }
 };

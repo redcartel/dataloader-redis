@@ -1,11 +1,12 @@
-import { genPrismaMock } from 'data-resources/src/tests/prismaMock';
+import { genPrismaMock } from 'data-resources/src/testResources/prismaMock';
 import { postRepositoryFactory } from "../data-access";
 import { PrismaClient } from 'data-resources/src/prisma-connection';
+import { config } from 'common-values';
 
 let postRepo : ReturnType<typeof postRepositoryFactory>;
 let realPostRepo : ReturnType<typeof postRepositoryFactory>;
 
-const testLive = !!process.env['LIVE_TEST']
+const testLive = config.test.liveTest;
 
 beforeEach(() => {
     postRepo = postRepositoryFactory(genPrismaMock() as any, 20)

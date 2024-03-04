@@ -6,6 +6,8 @@ import supertokens from "supertokens-node";
 import morgan from "morgan";
 import { redis } from "../server";
 import { config } from "common-values";
+import helmet from "helmet";
+import compression from "compression";
 
 function rateLimiterMiddleware(points: number) {
   const rateLimiter = new RateLimiterRedis({
@@ -31,16 +33,16 @@ function rateLimiterMiddleware(points: number) {
 export function applyExpressMiddleware(app: Application) {
   app.use(morgan(config.isProd ? "short" : "dev"));
   app.use(rateLimiterMiddleware(10));
-  // app.use(
-  //   cors({
-  //     origin: '*', //config.gateway.corsOrigin as string,
-  //     // allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
-  //     credentials: true,
-  //   }),
-  // );
-  // app.options('/graphql', cors('*'));
-  // IMPORTANT: CORS should be before the below line.
+  app.use(helmet());
+  app.use(
+    cors({
+      origin: '*', //config.gateway.corsOrigin as string,
+      // allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
+      credentials: true,
+    }),
+  );
+  // app.options('/graphql', cors());
   app.use(middleware());
-  // app.use(errorHandler());
-  // app.use(compression());
+  app.use(errorHandler());
+  app.use(compression());
 }

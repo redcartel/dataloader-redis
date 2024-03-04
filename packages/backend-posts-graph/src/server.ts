@@ -11,10 +11,10 @@ const client = new PrismaClient();
 const redisConnection = makeRedisConnection();
 
 export const postsGraph = createYoga({
-    schema: buildSubgraphSchema({
-      typeDefs: postsSchema,
-      resolvers: resolvers as GraphQLResolverMap<any>,
-    }),
-    plugins: [],
-    context: contextFactory(redisConnection, client),
-  });
+  schema: buildSubgraphSchema({
+    typeDefs: postsSchema,
+    resolvers: resolvers as GraphQLResolverMap<any>,
+  }),
+  plugins: [],
+  context: contextFactory(redisConnection, client),
+});

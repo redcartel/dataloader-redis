@@ -1,5 +1,3 @@
-import { Pool } from "pg";
-import { Response } from "express";
 import { RedisClientType } from "redis";
 import supertokens from "supertokens-node";
 import { config } from "common-values";
@@ -17,7 +15,7 @@ export async function getAccountFromSession(
   if (!userId) {
     if (config.auth.devSpoof && config.isDev) {
       userId = headers.authorization?.slice(7);
-      console.log(userId);
+      console.log('spoof:', userId);
     }
     if (!userId) {
       return {};
@@ -61,7 +59,7 @@ export async function getAccountFromSession(
         };
       }
     }
-    console.log(accountData);
+    console.log('accountData', accountData);
     redis.set(redisKey, JSON.stringify(accountData), {
       EX: 60,
     });

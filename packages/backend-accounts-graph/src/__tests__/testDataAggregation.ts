@@ -1,5 +1,5 @@
 import { createClient } from 'dataloader-redis/src/nondist/redis-mock';
-import { genPrismaMock } from 'data-resources/src/tests/prismaMock';
+import { genPrismaMock } from 'data-resources/src/testResources/prismaMock';
 import { accountLoaderFactory } from '../data-aggregation';
 import { accountRepositoryFactory } from '../data-access';
 
