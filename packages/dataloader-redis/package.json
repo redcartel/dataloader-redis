@@ -1,10 +1,10 @@
 {
   "name": "dataloader-redis",
-  "version": "0.2.0-alpha",
+  "version": "0.3.0-alpha",
   "main": "./dist/index.js",
   "author": "Carter Adams (carteradams@gmail.com)",
   "repository": {
-    "url": "https://github.com/redcartel/dataloader-redis"
+    "url": "git+https://github.com/redcartel/dataloader-redis.git"
   },
   "description": "Dataloader implementation with an intermediate redis cache layer",
   "license": "MIT",
@@ -30,5 +30,11 @@
   },
   "peerDependencies": {
     "redis": "^4.6.12"
-  }
+  },
+  "files": [
+    "dist",
+    "src",
+    "*.json",
+    "jest.config.js"
+  ]
 }

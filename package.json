@@ -1,8 +1,8 @@
 {
-  "name": "dataloader-mainpkg",
+  "name": "dataloader-redis-mainpkg",
   "version": "0.3.0-alpha",
   "repository": {
-    "url": "git+ssh://git@github.com/redcartel/dataloader-redis.git"
+    "url": "git+https://github.com/redcartel/dataloader-redis.git"
   },
   "author": "redcartel <carteradams@gmail.com>",
   "license": "MIT",
