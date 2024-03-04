@@ -7083,9 +7083,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dataloader-mainpkg@workspace:.":
+"dataloader-redis-mainpkg@workspace:.":
   version: 0.0.0-use.local
-  resolution: "dataloader-mainpkg@workspace:."
+  resolution: "dataloader-redis-mainpkg@workspace:."
   dependencies:
     "@types/pg": "npm:^8.11.0"
     "@types/wait-on": "npm:^5.3.4"
