@@ -1,1 +1,1 @@
-echo "test"
+docker build -f ../../dockerfiles/Dockerfile -t accouns_graph:latest ../../..
