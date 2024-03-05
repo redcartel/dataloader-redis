@@ -16,6 +16,7 @@
     "warmup": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish --dry-run",
     "publish": "yarn workspace dataloader-redis build && cd packages/dataloader-redis && npm publish",
     "test": "yarn workspace dataloader-redis jest",
+    "backend:build": "yarn workspaces foreach --all run server-build",
     "backend:dev": "docker compose up --build",
     "backend:test": "yarn workspaces foreach --all --parallel --interlaced run server-test",
     "backend:test:live": "dotenv -e .env yarn backend:test",

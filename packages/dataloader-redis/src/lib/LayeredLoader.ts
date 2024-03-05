@@ -1,17 +1,8 @@
 import DataLoader, { Options, BatchLoadFn } from "dataloader";
+import { Layer, OrError } from "./types";
 
 export const _debugLog = (...args: any[]) =>
   process.env["DATALOADER_REDIS_DEBUG"] && console.log(args);
-
-export type OrError<T> = T | Error;
-export type OrNull<T> = T | null;
-
-export type Layer<K, V> = {
-  reader: (keys: K[]) => Promise<OrError<V>[]>;
-  writer?: (keys: K[], vals: V[]) => Promise<void>;
-  clear?: (key: K) => Promise<void>;
-  prime?: (key: K, value: V) => void;
-};
 
 export class LayeredLoader<K, V> extends DataLoader<K, V> {
   private layers: Layer<K, V>[];

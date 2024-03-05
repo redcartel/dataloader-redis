@@ -1,10 +1,6 @@
-import express from "express";
-import helmet from "helmet";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+
 import { yogaPlugins } from "./middleware/yoga-plugins";
 import { contextFactory } from "./context";
-import { makePostgresConnection } from "data-resources/src/postgres-connection";
 import { makeRedisConnection } from "data-resources/src/redis-connection";
 import { createYoga } from "graphql-yoga";
 import { schemaFactory } from "./schema-loader";

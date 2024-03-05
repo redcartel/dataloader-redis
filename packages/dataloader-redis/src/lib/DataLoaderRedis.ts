@@ -1,21 +1,8 @@
-import { LayeredLoader, OrError, OrNull } from "./LayeredLoader";
+import { LayeredLoader } from "./LayeredLoader";
 import stringify from "json-stable-stringify";
-import { Options } from "dataloader";
 import { v3 } from "murmurhash";
-import { createClient } from "redis";
 import { LRUCache } from "lru-cache";
-
-type _RedisClient = ReturnType<typeof createClient<any, any, any>>;
-
-type DataLoaderRedisOptions<K, V, M> = {
-  prefix?: string;
-  ttl?: number;
-  dataLoaderOptions?: Options<K, V>;
-  serializeKey?: (key: K) => string;
-  serializeValue?: (value: V | M) => string;
-  deserializeValue?: (serialized: string) => OrError<V>;
-  missingValue?: (key: K) => M;
-};
+import { DataLoaderRedisOptions, OrError, OrNull, _RedisClient } from "./types";
 
 class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K, V | M> {
   public client: _RedisClient;
@@ -47,7 +34,7 @@ class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K
   ) {
     const {
       ttl,
-      dataLoaderOptions: options,
+      dataloaderOptions: options,
       serializeKey,
       serializeValue,
       deserializeValue,
@@ -117,7 +104,7 @@ class DataLoaderRedis<K extends {}, V extends {}, M = V> extends LayeredLoader<K
     this.serializeKey = serializeKey ?? this.serializeKey;
     this.serializeValue = serializeValue ?? this.serializeValue;
     this.deserializeValue = deserializeValue ?? this.deserializeValue;
-    this.missingValue = missingValue ?? (key => { throw new Error('Not Found')});
+    this.missingValue = missingValue ?? ((key) => { throw new Error('Not Found')});
     this.prefix =
       dataloaderRedisOptions?.prefix ?? v3(batchLoad.toString()).toString(36);
     this.client = client;
