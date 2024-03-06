@@ -1,13 +1,13 @@
 import { postsGraph } from "./server";
 import express from "express";
-import cors from "cors";
-import helmet from "helmet";
 import { config } from "common-values";
 
 const app = express();
 
 app.use(postsGraph.graphqlEndpoint, postsGraph);
 
-app.listen(4002, () => {
-  console.log(`Posts service running at port 4002`);
+const port = config.gateway.url?.match(/localhost/) ? 4001 : 4000;
+
+app.listen(port, () => {
+  console.log(`Posts service running at port ${port}`);
 });
