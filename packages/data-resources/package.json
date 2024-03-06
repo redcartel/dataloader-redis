@@ -9,7 +9,8 @@
     "run-supertokens": "docker run -p 3567:3567 --rm --name supertokens  --network=host -e POSTGRESQL_CONNECTION_URI=\"postgresql://appuser:password@localhost:5432/supertokens?keepalives=1&sslmode=disable\" registry.supertokens.io/supertokens/supertokens-postgresql:7.0",
     "run-proj-persist": "concurrently \"npm:run-redis\" \"npm:run-postgres-persist\" \"npm:run-supertokens\"",
     "run-proj": "concurrently \"npm:run-redis\" \"npm:run-postgres\" \"npm:run-supertokens\"",
-    "migrate": "dotenv -e ../../.env yarn pnpify prisma migrate dev"
+    "migrate": "dotenv -e ../../.env yarn pnpify prisma migrate dev",
+    "generate": "dotenv -e ../../.env yarn pnpify prisma generate"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
