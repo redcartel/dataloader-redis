@@ -151,7 +151,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/app/packages/data-resources/src/generated/prismaClient",
+      "value": "/Users/redcartel/code/dataloader-redis/packages/data-resources/src/generated/prismaClient",
       "fromEnvVar": null
     },
     "config": {
@@ -160,12 +160,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "linux-arm64-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       },
       {
         "fromEnvVar": null,
         "value": "linux-arm64-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl-openssl-3.0.x"
       }
     ],
     "previewFeatures": [
@@ -184,7 +188,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -193,8 +196,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prismaClient\"\n  previewFeatures = [\"relationJoins\"]\n  binaryTargets = [\"native\", \"linux-arm64-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Account {\n  createdAt  DateTime        @default(now())\n  updatedAt  DateTime        @updatedAt\n  email      String          @unique\n  username   String          @unique\n  profilePic String?\n  bio        String?\n  id         String          @id @db.Uuid\n  followedBy AccountFollow[] @relation(\"followee_relation\")\n  follows    AccountFollow[] @relation(\"follower_relation\")\n  posts      Post[]\n}\n\nmodel Post {\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n  id        String     @id @db.Uuid\n  authorId  String     @db.Uuid\n  body      String\n  repostId  String?    @db.Uuid\n  author    Account    @relation(fields: [authorId], references: [id])\n\n  @@unique([authorId, createdAt])\n}\n\nmodel AccountFollow {\n  id         String   @id\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n  followerId String   @db.Uuid\n  followeeId String   @db.Uuid\n  followee   Account  @relation(\"followee_relation\", fields: [followeeId], references: [id])\n  follower   Account  @relation(\"follower_relation\", fields: [followerId], references: [id])\n\n  @@unique([followerId, followeeId])\n}\n",
-  "inlineSchemaHash": "e56c65ced2304ce8960029c1bbea46e63142c325c83f95209fa23f3100a7bfa7",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prismaClient\"\n  previewFeatures = [\"relationJoins\"]\n  binaryTargets = [\"native\", \"linux-arm64-openssl-3.0.x\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Account {\n  createdAt  DateTime        @default(now())\n  updatedAt  DateTime        @updatedAt\n  email      String          @unique\n  username   String          @unique\n  profilePic String?\n  bio        String?\n  id         String          @id @db.Uuid\n  followedBy AccountFollow[] @relation(\"followee_relation\")\n  follows    AccountFollow[] @relation(\"follower_relation\")\n  posts      Post[]\n}\n\nmodel Post {\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n  id        String     @id @db.Uuid\n  authorId  String     @db.Uuid\n  body      String\n  repostId  String?    @db.Uuid\n  author    Account    @relation(fields: [authorId], references: [id])\n\n  @@unique([authorId, createdAt])\n}\n\nmodel AccountFollow {\n  id         String   @id\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n  followerId String   @db.Uuid\n  followeeId String   @db.Uuid\n  followee   Account  @relation(\"followee_relation\", fields: [followeeId], references: [id])\n  follower   Account  @relation(\"follower_relation\", fields: [followerId], references: [id])\n\n  @@unique([followerId, followeeId])\n}\n",
+  "inlineSchemaHash": "1608861d9572c95021c8ddc985c5a192618109007e28e9f3949d187b4bcd61f1",
   "copyEngine": true
 }
 config.dirname = '/'

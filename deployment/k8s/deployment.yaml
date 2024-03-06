@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: <<NAME>>
-          image: <<IMAGE_URL>>:latest
+          image: registry.digitalocean.com/omnitemplate-registry/omnigraph:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
