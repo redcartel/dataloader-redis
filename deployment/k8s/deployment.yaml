@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: <<NAME>>
-          image: registry.digitalocean.com/omnitemplate-registry/<<NAME>>:latest
+          image: <<IMAGE_URL>>:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
           envFrom:
           - secretRef:
-              name: omnigraph-secrets
+              name: graph-secrets
           env:
           - name: PACKAGE_NAME
             value: <<NAME>>
