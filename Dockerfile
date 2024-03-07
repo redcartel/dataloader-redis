@@ -7,9 +7,9 @@ COPY . .
 
 RUN yarn set version stable
 RUN yarn
+RUN yarn workspace data-resources pnpify prisma generate
 RUN yarn build
 RUN yarn backend:build
-RUN yarn workspace data-resources pnpify prisma generate
 
 ENV PACKAGE_NAME=backend_gateway
 
