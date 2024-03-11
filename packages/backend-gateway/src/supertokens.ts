@@ -53,4 +53,8 @@ const stConfig = {
 
 // console.log(stConfig);
 
-supertokens.init(stConfig as any);
+try {
+  supertokens.init(stConfig as any);
+} catch {
+  console.log("supertokens init fail");
+}

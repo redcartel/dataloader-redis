@@ -1,5 +1,5 @@
 import { RateLimiterRedis } from "rate-limiter-flexible";
-import { Application} from "express";
+import { Application } from "express";
 import { errorHandler, middleware } from "supertokens-node/framework/express";
 import cors from "cors";
 import supertokens from "supertokens-node";
@@ -32,11 +32,11 @@ function rateLimiterMiddleware(points: number) {
 
 export function applyExpressMiddleware(app: Application) {
   app.use(morgan(config.isProd ? "short" : "dev"));
-  app.use(rateLimiterMiddleware(10));
+  if (config.nodeEnv === "production") app.use(rateLimiterMiddleware(10));
   app.use(helmet());
   app.use(
     cors({
-      origin: '*', //config.gateway.corsOrigin as string,
+      origin: "*", //config.gateway.corsOrigin as string,
       // allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
       credentials: true,
     }),

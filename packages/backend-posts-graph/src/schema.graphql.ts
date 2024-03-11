@@ -4,7 +4,7 @@ export const postsSchema = gql`
   type Post @key(fields: "id") {
     id: ID!
     authorId: ID!
-    # body: String!
+    body: String!
     author: Account!
     createdAt: String!
     updatedAt: String!

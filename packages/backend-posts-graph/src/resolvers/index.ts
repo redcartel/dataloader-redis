@@ -50,25 +50,25 @@ export const resolvers: GraphQLResolverMap<PostsContext> = {
       }
     },
     author: async (root: any, {}, { accountLoaders }: PostsContext) => {
-      return await accountLoaders.accountById.load(root.accountsId!);
+      return await accountLoaders.accountById.load(root?.authorId!);
     },
-    likes: async (root: any, {}, { loaders, account }: PostsContext) => {
-      if (account.id === root.accountsId) {
-        return await loaders.likesByPostAndCursor.load([
-          root.id!,
-          getRoundedDate(),
-          '00000000-0000-0000-0000-000000000000'
-        ]);
-      } else return null;
-    },
-    likes_count: async (root: any, {}, { loaders }: PostsContext) => {
-      return (await loaders.likeCountByPostsId.load(root.id!)) ?? 0;
-    },
+    // likes: async (root: any, {}, { loaders, account }: PostsContext) => {
+    //   if (account.id === root.accountsId) {
+    //     return await loaders.likesByPostAndCursor.load([
+    //       root.id!,
+    //       getRoundedDate(),
+    //       '00000000-0000-0000-0000-000000000000'
+    //     ]);
+    //   } else return null;
+    // },
+    // likes_count: async (root: any, {}, { loaders }: PostsContext) => {
+    //   return (await loaders.likeCountByPostsId.load(root.id!)) ?? 0;
+    // },
   },
   Like: {
     post: async (root: any, {}, { loaders, account }: PostsContext) => {
       const post = await loaders.postsById.load(root.posts_id!);
-      if (account.id !== post.accountsId) {
+      if (account.id !== post?.authorId) {
         throw new GraphQLError("Item Not Found");
       }
       return post;
@@ -78,11 +78,11 @@ export const resolvers: GraphQLResolverMap<PostsContext> = {
       { loaders, accountLoaders, account }: PostsContext,
     ) => {
       const post = await loaders.postsById.load(root.posts_id!);
-      if (account.id !== post.accountsId) {
+      if (account.id !== post?.authorId) {
         return null;
       }
       const returnAccount = await accountLoaders.accountById.load(
-        root.accountsId!,
+        root.authorId!,
       );
       return returnAccount;
     },
@@ -155,10 +155,11 @@ export const resolvers: GraphQLResolverMap<PostsContext> = {
       if (!body || !body.length) {
         throw new GraphQLError("Argument error");
       }
-      const post = await postRepository.insertPost(
-        accountsId,
-        body.slice(0, 140),
-      );
+      const post : any = undefined;
+      // const post = await postRepository.insertPost(
+      //   accountsId,
+      //   body.slice(0, 140),
+      // );
       if (post instanceof Error) {
         throw new GraphQLError("Error creating post");
       }

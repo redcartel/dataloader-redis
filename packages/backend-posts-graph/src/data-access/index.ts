@@ -9,12 +9,16 @@ type ArrayElement<ArrayType extends readonly unknown[]> =
 
 const defaultSelect = {
   id: true,
+  body: true,
   authorId: true,
   updatedAt: true,
   createdAt: true,
 };
 
-export function postRepositoryFactory(connection: PrismaClient, limit?: number) {
+export function postRepositoryFactory(
+  connection: PrismaClient,
+  limit?: number,
+) {
   limit = limit ?? config.backend.pageLimit;
 
   return {

@@ -1,4 +1,3 @@
-
 import { yogaPlugins } from "./middleware/yoga-plugins";
 import { contextFactory } from "./context";
 import { makeRedisConnection } from "data-resources/src/redis-connection";
@@ -16,11 +15,11 @@ export const gatewayApp = createYoga({
   maskedErrors: config.isProd,
   plugins: yogaPlugins,
   context: contextFactory(redis, client),
-  graphiql: config.isDev,
+  graphiql: true, //!config.isProd,
   logging: config.isProd ? "warn" : "debug",
   cors: {
-    origin: 'http://localhost:3000',
+    origin: "http://localhost:3000",
     credentials: true,
-    methods: ['POST']
-  }
+    methods: ["POST"],
+  },
 });
