@@ -8,8 +8,6 @@ export const postsSchema = gql`
     author: Account!
     createdAt: String!
     updatedAt: String!
-    # likes: [Like!]!
-    # likes_count: Int!
   }
 
   type PostsWithCursor {
@@ -18,18 +16,9 @@ export const postsSchema = gql`
     cursorId: String
   }
 
-  type Like @key(fields: "id") {
-    id: ID!
-    posts_id: ID!
-    accountsId: ID
-    author: Account
-    post: Post!
-  }
-
   extend type Account @key(fields: "id") {
     id: ID! @external
     posts: [Post!]!
-    likes: [Like!]!
   }
 
   input PostsInput {
@@ -44,7 +33,6 @@ export const postsSchema = gql`
   }
 
   type Mutation {
-    makePost(body: String): Post
-    likePost(id: ID!): Like
+    createPost(body: String): Post
   }
 `;

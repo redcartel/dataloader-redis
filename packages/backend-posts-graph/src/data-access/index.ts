@@ -121,5 +121,16 @@ export function postRepositoryFactory(
           ],
       );
     },
+    async insertPost(authorId: string, body: string) {
+      const result = await connection.post.create({
+        select: defaultSelect,
+        data: {
+          id: uuidv7(),
+          body,
+          authorId,
+        },
+      });
+      return result;
+    },
   };
 }

@@ -32,8 +32,8 @@ function rateLimiterMiddleware(points: number) {
 
 export function applyExpressMiddleware(app: Application) {
   app.use(morgan(config.isProd ? "short" : "dev"));
-  if (config.nodeEnv === "production") app.use(rateLimiterMiddleware(10));
-  app.use(helmet());
+  if (config.isProd) app.use(rateLimiterMiddleware(10));
+  if (config.isProd) app.use(helmet());
   app.use(
     cors({
       origin: "*", //config.gateway.corsOrigin as string,
