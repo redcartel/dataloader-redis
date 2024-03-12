@@ -10,6 +10,7 @@ import stringify from "json-stable-stringify";
 import { Executor } from "@graphql-tools/utils";
 import waitOn from "wait-on";
 import { config } from "common-values";
+import { authExecutor } from "graph-common/src/http-executor/authExecutor";
 
 const SDL_QUERY = parse(/* GraphQL */ `
   query GetSDL {
@@ -21,6 +22,9 @@ const SDL_QUERY = parse(/* GraphQL */ `
 
 const subschemaCache = createLRUCache<string>();
 
+/**
+ * Fetch a subschema from a subgraph endpoint. If the fetch fails, use a cached result if any exists.
+ */
 async function fetchFederationSubschema(executor: Executor, url: string) {
   const result = await executor({ document: SDL_QUERY });
   if (isAsyncIterable(result)) {
@@ -52,47 +56,40 @@ async function fetchFederationSubschema(executor: Executor, url: string) {
   };
 }
 
-function authExecutor(endpoint: string) {
-  const executor = buildHTTPExecutor({
-    endpoint: endpoint,
-    headers: (execution) => {
-      return {
-        'x-account': `${stringify(execution?.context?.account ?? {})}`,
-      };
-    },
-  });
-  return executor;
-}
-
+/**
+ * Fetch a subschema
+ */
 function fetchSchema(endpoint: string) {
   return fetchFederationSubschema(authExecutor(endpoint), endpoint);
 }
 
+/**
+ * Fetch all subschemas from all subgraph endpoints
+ */
 function fetchSchemas() {
-  return Promise.all([...config.gateway.endpoints.map((endpoint) => fetchSchema(endpoint))]);
+  return Promise.all([
+    ...config.gateway.endpoints.map((endpoint) => fetchSchema(endpoint)),
+  ]);
 }
 
+/**
+ * Fetch subschemas and stitch to make gateway schema
+ */
 async function makeGatewaySchema() {
   const { stitchingDirectivesTransformer } = stitchingDirectives();
   const schema = stitchSchemas({
     subschemaConfigTransforms: [stitchingDirectivesTransformer],
-    subschemas: await fetchSchemas().then((result) => {
-      return result;
-    }),
+    subschemas: await fetchSchemas(),
   });
   return schema;
 }
 
 let _schemas: ReturnType<typeof makeGatewaySchema> | GraphQLSchema;
 
-function startSchemaReload(immediateReload: boolean = false) {
-  if (immediateReload) {
-    console.log("initial retry in 10");
-    setTimeout(async () => {
-      _schemas = await makeGatewaySchema();
-      console.log("schema initial reload,", JSON.stringify(_schemas).length);
-    }, 10000);
-  }
+/**
+ * Poll for schema updates every 5 seconds
+ */
+function startSchemaReload() {
   setInterval(async () => {
     const _reload_schemas = await makeGatewaySchema();
     if (_reload_schemas && stringify(_reload_schemas) !== stringify(_schemas)) {
@@ -102,29 +99,25 @@ function startSchemaReload(immediateReload: boolean = false) {
   }, 5000);
 }
 
-export async function initializeSchama(refreshPolling = true) {
+/**
+ * Wait for subgraphs, load stitched schema, begin polling for updates
+ */
+export async function initializeSchema() {
   await waitOn({
     resources: config.gateway.waitOnResources,
   });
   try {
     _schemas = await makeGatewaySchema();
     console.log("initial schema load, ", stringify(_schemas).length);
-    if (refreshPolling) {
-      startSchemaReload(false);
-    }
   } catch (e) {
-    console.error("schema load error,", e);
-    if (refreshPolling) {
-      startSchemaReload(true);
-    } else {
-      setTimeout(async () => {
-        _schemas = await makeGatewaySchema();
-        console.log("schema initial reload,", stringify(_schemas).length);
-      }, 15000);
-    }
+    console.error("initial schema load failed");
   }
+  startSchemaReload();
 }
 
-export function schemaFactory() {
+/**
+ * Retrieve current schema
+ */
+export function currentSchema() {
   return _schemas;
 }

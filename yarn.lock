@@ -859,6 +859,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-tools/executor-http@npm:^1.0.9":
+  version: 1.0.9
+  resolution: "@graphql-tools/executor-http@npm:1.0.9"
+  dependencies:
+    "@graphql-tools/utils": "npm:^10.0.13"
+    "@repeaterjs/repeater": "npm:^3.0.4"
+    "@whatwg-node/fetch": "npm:^0.9.0"
+    extract-files: "npm:^11.0.0"
+    meros: "npm:^1.2.1"
+    tslib: "npm:^2.4.0"
+    value-or-promise: "npm:^1.0.12"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10c0/d1e5bea39ca4c2d6069f097ebbe6f96690a7497b384766a8616fb26cb59ae4a0a2fff31ceb1a4f682dc0d78772d157a786cf680d2ac2ac3fbc2eb18b8813e8f3
+  languageName: node
+  linkType: hard
+
 "@graphql-tools/executor@npm:^1.0.0":
   version: 1.2.0
   resolution: "@graphql-tools/executor@npm:1.2.0"
@@ -2448,6 +2465,7 @@ __metadata:
     dataloader-redis: "workspace:^"
     esbuild: "npm:^0.20.0"
     express: "npm:^4.18.2"
+    graph-common: "workspace:^"
     graphql: "npm:^16.8.1"
     graphql-tag: "npm:^2.12.6"
     graphql-yoga: "npm:^5.1.1"
@@ -2492,6 +2510,7 @@ __metadata:
     dataloader-redis: "workspace:^"
     esbuild: "npm:^0.20.0"
     express: "npm:^4.18.2"
+    graph-common: "workspace:^"
     graphql: "npm:^16.8.1"
     graphql-tag: "npm:^2.12.6"
     graphql-yoga: "npm:^5.1.1"
@@ -2526,6 +2545,7 @@ __metadata:
     dataloader-redis: "workspace:^"
     esbuild: "npm:^0.20.0"
     express: "npm:^4.18.2"
+    graph-common: "workspace:^"
     graphql: "npm:^16.8.1"
     graphql-tag: "npm:^2.12.6"
     graphql-yoga: "npm:^5.1.1"
@@ -4067,6 +4087,18 @@ __metadata:
   checksum: 10c0/386d011a553e02bc594ac2ca0bd6d9e4c22d7fa8cfbfc448a6d148c59ea881b092db9dbe3547ae4b88e55f1b01f7c4a2ecc53b310c042793e63aa44cf6c257f2
   languageName: node
   linkType: hard
+
+"graph-common@workspace:^, graph-common@workspace:packages/graph-common":
+  version: 0.0.0-use.local
+  resolution: "graph-common@workspace:packages/graph-common"
+  dependencies:
+    "@graphql-tools/executor-http": "npm:^1.0.9"
+    "@types/json-stable-stringify": "npm:^1.0.36"
+    graphql: "npm:^16.8.1"
+    graphql-yoga: "npm:^5.1.1"
+    json-stable-stringify: "npm:^1.1.1"
+  languageName: unknown
+  linkType: soft
 
 "grapheme-splitter@npm:^1.0.4":
   version: 1.0.4

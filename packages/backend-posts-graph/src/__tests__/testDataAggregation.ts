@@ -8,24 +8,30 @@ import { RedisClientType } from "redis";
 import { config } from "common-values";
 
 let loaders: ReturnType<typeof postLoaderFactory>;
-let realLoaders: ReturnType<typeof postLoaderFactory>; 
+let realLoaders: ReturnType<typeof postLoaderFactory>;
 
 const testLive = config.test.liveTest;
 
-let connection : RedisClientType | undefined = undefined;
+let connection: RedisClientType | undefined = undefined;
 
 beforeEach(async () => {
-  loaders = postLoaderFactory(createClient() as any, postRepositoryFactory(genPrismaMock() as any));
+  loaders = postLoaderFactory(
+    createClient() as any,
+    postRepositoryFactory(genPrismaMock() as any),
+  );
   if (testLive) {
     connection = makeRedisConnection();
     await connection.connect();
-    realLoaders = postLoaderFactory(connection, postRepositoryFactory(new PrismaClient(), 20));
+    realLoaders = postLoaderFactory(
+      connection,
+      postRepositoryFactory(new PrismaClient(), 20),
+    );
   }
 });
 
 afterEach(async () => {
   await connection?.disconnect();
-})
+});
 
 test("loads data from dataloader", async () => {
   const id1 = "10000000-0000-0000-0000-000000000000";
@@ -36,7 +42,7 @@ test("loads data from dataloader", async () => {
   const p3 = loaders.postsById.load(id3);
   expect((await p1)?.id).toBe(id1);
   expect((await p2)?.id).toBe(id2);
-  expect((await p3)).toBeUndefined();
+  expect(await p3).toBeNull();
 });
 
 if (testLive) {

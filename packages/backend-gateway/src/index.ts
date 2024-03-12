@@ -1,11 +1,11 @@
 import { gatewayApp } from "./server";
-import { initializeSchama } from "./schema-loader";
+import { initializeSchema } from "./schema-loader";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import "./supertokens";
 import express from "express";
 import { applyExpressMiddleware } from "./middleware/express-plugins";
 
-initializeSchama(true);
+initializeSchema();
 
 const app = express();
 

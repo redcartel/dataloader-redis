@@ -58,18 +58,20 @@ export function postRepositoryFactory(
   `.catch((e) => {
         console.error(e);
       });
-      const key = (row) =>
+      const keyFromRow = (row) =>
         `${row.cursor_timestamp.toISOString()} ${row.cursor_id.toLowerCase()}`;
       const map: { [key: string]: Array<any> } = {};
       result?.forEach((row) => {
-        if (map[key(row)] === undefined) {
-          map[key(row)] = [];
+        if (map[keyFromRow(row)] === undefined) {
+          map[keyFromRow(row)] = [];
         }
-        map[key(row)].push(row);
+        map[keyFromRow(row)].push(row);
       });
       return cursors.map(
         (cursor) =>
-          map[key({ cursor_timestamp: cursor[0], cursor_id: cursor[1] })],
+          map[
+            keyFromRow({ cursor_timestamp: cursor[0], cursor_id: cursor[1] })
+          ],
       );
     },
 
@@ -101,19 +103,19 @@ export function postRepositoryFactory(
   `.catch((e) => {
         console.error(e);
       });
-      const key = (row) =>
+      const keyFromRow = (row) =>
         `${row.authorId.toLowerCase()} ${row.cursor_timestamp.toISOString()} ${row.cursor_id.toLowerCase()}`;
       const map: { [key: string]: Array<any> } = {};
       result?.forEach((row) => {
-        if (map[key(row)] === undefined) {
-          map[key(row)] = [];
+        if (map[keyFromRow(row)] === undefined) {
+          map[keyFromRow(row)] = [];
         }
-        map[key(row)].push(row);
+        map[keyFromRow(row)].push(row);
       });
       return accountCursors.map(
         (cursor) =>
           map[
-            key({
+            keyFromRow({
               authorId: cursor[0],
               cursor_timestamp: cursor[1],
               cursor_id: cursor[2],

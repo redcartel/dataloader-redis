@@ -6,7 +6,6 @@ const app = express();
 
 app.use(postsGraph.graphqlEndpoint, postsGraph);
 
-// const port = config.gateway.url?.match(/localhost/) ? 4001 : 4000;
 const port = 4000;
 
 app.listen(port, () => {

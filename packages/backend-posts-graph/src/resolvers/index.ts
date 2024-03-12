@@ -26,7 +26,8 @@ type PostsInputArgs = {
 };
 
 function getRoundedDate(cursor?: string) {
-  const currentMs = new Date().getTime();
+  // for current time round up to multiple of 100 ms to improve batching of query
+  const currentMs = Math.ceil(new Date().getTime() / 100) * 100;
   let cursorMs = currentMs;
   const ms = cursor ? Date.parse(cursor) : currentMs;
   if (ms - 60000 > currentMs) {
@@ -35,7 +36,6 @@ function getRoundedDate(cursor?: string) {
   // const roundedMs = Math.ceil(ms / 500) * 500;
   const result = new Date(0);
   result.setMilliseconds(ms);
-  console.log(result);
   return result;
 }
 
@@ -103,9 +103,7 @@ export const resolvers: GraphQLResolverMap<PostsContext> = {
       { input }: PostsInputArgs,
       { loaders }: PostsContext,
     ) => {
-      console.log("INPUT: ", input);
       const date = getRoundedDate(input?.cursorTimestamp);
-      console.log("DATE: ", date);
       const cursorId =
         input?.cursorId ?? "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF";
       let posts: any[];

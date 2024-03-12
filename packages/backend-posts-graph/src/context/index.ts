@@ -4,6 +4,8 @@ import { accountLoaderFactory } from "backend-accounts-graph/src/data-aggregatio
 import { PrismaClient } from "data-resources/src/prisma-connection";
 import { postRepositoryFactory } from "../data-access";
 import { accountRepositoryFactory } from "backend-accounts-graph/src/data-access";
+import { getAccountFromContext } from "graph-common/src/subgraph-context/getAccountFromContext";
+import { YogaInitialContext } from "graphql-yoga";
 
 export function contextFactory(
   redisConnection: RedisClientType,
@@ -13,13 +15,12 @@ export function contextFactory(
   const accountRepo = accountRepositoryFactory(client);
   const postLoaders = postLoaderFactory(redisConnection, postRepo);
   const accountLoaders = accountLoaderFactory(redisConnection, accountRepo);
-  return (context) => {
-    const account = JSON.parse(context.request.headers.get("x-account") ?? "{}");
+  return (context: YogaInitialContext) => {
     return {
-      account,
+      account: getAccountFromContext(context),
       loaders: postLoaders,
       accountLoaders: accountLoaders,
-      postRepository: postRepo
+      postRepository: postRepo,
     };
   };
 }

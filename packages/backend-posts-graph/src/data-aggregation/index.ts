@@ -21,7 +21,7 @@ export function postLoaderFactory(
       async (ids: string[]) => repo.postByIdsAggregate(ids),
       {
         ttl: config.backend.dataloaderTtl,
-        missingValue: (key) => undefined,
+        missingValue: (_) => null,
       },
     ),
 
@@ -31,6 +31,7 @@ export function postLoaderFactory(
         await repo.postsByCursorAggregate(cursors),
       {
         ttl: 2,
+        missingValue: (_) => [],
       },
     ),
 
@@ -40,6 +41,7 @@ export function postLoaderFactory(
         await repo.postsByAccountsAndCursorsAggregate(accountCursors),
       {
         ttl: 2,
+        missingValue: (_) => [],
       },
     ),
   };

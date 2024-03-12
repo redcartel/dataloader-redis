@@ -16,6 +16,7 @@ export function accountLoaderFactory(
       (ids: string[]) => repo.accountAggregate(ids),
       {
         ttl: config.backend.dataloaderTtl,
+        missingValue: (_) => null,
       },
     ),
   };

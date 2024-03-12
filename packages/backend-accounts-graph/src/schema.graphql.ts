@@ -13,6 +13,7 @@ export const accountsSchema = gql`
   type AccountResponse {
     id: ID
     email: String
+    username: String
   }
 
   type Query {

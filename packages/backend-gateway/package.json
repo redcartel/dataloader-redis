@@ -16,6 +16,7 @@
     "data-resources": "workspace:^",
     "dataloader-redis": "workspace:^",
     "express": "^4.18.2",
+    "graph-common": "workspace:^",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "graphql-yoga": "^5.1.1",

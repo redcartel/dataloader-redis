@@ -4,17 +4,22 @@ import { accountLoaderFactory } from "../data-aggregation";
 import { PrismaClient } from "data-resources/src/prisma-connection";
 import { config } from "common-values";
 import { accountRepositoryFactory } from "../data-access";
+import { YogaInitialContext } from "graphql-yoga";
+import { getAccountFromContext } from "graph-common/src/subgraph-context/getAccountFromContext";
 
 export function contextFactory(
   redisConnection: RedisClientType,
   client: PrismaClient,
 ) {
-  const loaders = accountLoaderFactory(redisConnection, accountRepositoryFactory(client, config.backend.pageLimit));
-  return (context: any) => {
+  const loaders = accountLoaderFactory(
+    redisConnection,
+    accountRepositoryFactory(client, config.backend.pageLimit),
+  );
+  return (context: YogaInitialContext) => {
     return {
       ...context,
-      account: JSON.parse(context.request.headers.get("x-account") ?? "{}"),
-      loaders
+      account: getAccountFromContext(context),
+      loaders,
     };
   };
 }

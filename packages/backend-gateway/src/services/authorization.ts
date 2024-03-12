@@ -36,10 +36,9 @@ export async function getAccountFromSession(
     }
   }
   const redisUser = await redis.get(redisKey);
-  console.log("redis user: ", redisUser);
   let accountData: { email?: string; id?: string; username?: string } = {};
   if (redisUser !== null && JSON.parse(redisUser)["email"]) {
-    console.log(redisUser);
+    console.log("redisUser", redisUser);
     return JSON.parse(redisUser) as typeof accountData;
   } else {
     const userData = await supertokens.getUser(userId);
@@ -76,7 +75,6 @@ export async function getAccountFromSession(
             username: userData!.emails[0],
           },
         });
-        console.log("insert, ", result);
         accountData = {
           email: result.email,
           id: result.username,
